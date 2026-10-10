@@ -2,7 +2,7 @@
 
 개인 홈페이지: 최진원
 목적: 다양한 맞춤 업무 자동화 프로젝트의 초기 상담 접수
-현재 실행 환경: Next.js, React, TypeScript / Netlify 공개 배포 준비
+현재 실행 환경: Next.js, React, TypeScript / Netlify 공개 배포
 실적·고객 후기·소속 기업은 임의로 추가하지 않았습니다.
 
 페이지
@@ -46,7 +46,9 @@ npm start : next start
 netlify.toml : build npm run build / publish .next / Node.js 22
 로컬 D1 마이그레이션이나 관리자 이메일·요청 제한 비밀키는 필요하지 않습니다.
 로컬 서버는 화면 개발용이며 Netlify Forms 저장은 배포 환경에서 확인합니다.
-GitHub 소스 업로드와 Netlify 배포는 별도이며, 자동 배포는 지속적 배포 연결이 필요합니다.
+배포 주소: https://agent-fde.netlify.app
+상담 관리: https://app.netlify.com/projects/agent-fde/forms (Netlify 로그인 필요)
+GitHub main 브랜치와 배포 연결을 구성했습니다.
 환경 파일·계정 인증 정보·실제 문의 데이터는 소스에 포함하지 않습니다.
 
 사이트 주소·SEO
@@ -58,8 +60,8 @@ SITE_URL : 사용자 도메인을 사용할 때 지정하는 선택 환경변수
 검색엔진이 접근 가능한 배포 환경에서 수집할 수 있으며 검색 노출·순위는 보장하지 않습니다.
 
 검증 기록
-이전 Sites 배포: TypeScript 검사, 단위 테스트 7개, 검색 대상 11개 URL·메타데이터,
-없는 서비스 404, 모바일 360px 화면, D1 상담 저장 및 운영 배포 확인.
-위 기록은 이전 환경의 결과이며 Netlify 배포와 폼 저장 성공을 의미하지 않습니다.
-Netlify 전환 버전의 최종 빌드·화면·SEO·Forms 접수 검증 결과는 배포 완료 후 갱신합니다.
+Netlify: Next.js 운영 빌드·TypeScript 검사와 테스트 10개 통과.
+공개 주소의 11개 검색 대상 페이지·canonical·사이트맵·robots·없는 서비스 404 확인.
+모바일 360px 메뉴·서비스 목록과 가로 넘침 없음 확인.
+실제 상담 폼으로 테스트 문의 접수 및 Netlify Forms 저장 확인 후 테스트 데이터 삭제.
 docs/DEVELOPMENT.md는 Sites·Vinext·D1 시절 참고 문서입니다. 현재 실행은 README.md를 따릅니다.

@@ -2,7 +2,9 @@
 
 최진원의 개발 경력과 업종별 자동화 서비스를 소개하고, 프로젝트 상담을 접수하는 개인 홈페이지입니다. Next.js, React, TypeScript로 구성하며 Netlify에 배포합니다.
 
-현재 Netlify 공개 배포를 준비하고 있습니다. GitHub 소스 업로드와 Netlify 배포는 별도 작업이며, 지속적 배포를 연결해야 이후 Git 변경 사항이 자동으로 배포됩니다.
+[홈페이지](https://agent-fde.netlify.app) · [상담 문의함](https://app.netlify.com/projects/agent-fde/forms)
+
+Netlify에 공개 배포했습니다. 상담 문의함은 해당 Netlify 프로젝트에 권한이 있는 계정으로 로그인해야 열 수 있습니다. GitHub `main` 브랜치와 배포 연결을 구성했습니다.
 
 ## 주요 기능
 
@@ -79,12 +81,16 @@ npm start
 
 ## 검증 현황
 
-이전 Sites 배포에서는 TypeScript 검사, 문의 검증 단위 테스트 7개, 11개 검색 대상 URL과 메타데이터, 없는 서비스의 404, 모바일 화면, D1 상담 저장과 운영 배포를 확인했습니다. 이는 **이전 실행 환경의 결과**이며 Netlify 배포와 폼 저장의 검증 결과를 대신하지 않습니다.
+현재 Netlify 배포에서 다음을 확인했습니다.
 
-Netlify 전환 버전은 빌드, 페이지 응답, 모바일 화면, SEO 주소와 실제 Forms 접수 결과를 별도로 검증합니다. 최종 결과는 배포 완료 후 갱신합니다.
+- Next.js 운영 빌드·TypeScript 검사 및 테스트 10개 통과
+- 11개 검색 대상 페이지의 정상 응답·고유 제목·설명·대표 주소·구조화 데이터 확인
+- 사이트맵과 robots.txt의 Netlify 주소, 상담 페이지 noindex, 없는 서비스 404 확인
+- 모바일 360px 메뉴 이동과 서비스 목록 표시, 가로 넘침 없음 확인
+- 실제 상담 화면에서 테스트 접수 후 Netlify Forms 저장 확인 및 테스트 데이터 삭제
 
 ```sh
-npx tsc --noEmit
+npm test
 npm run build
 ```
 
