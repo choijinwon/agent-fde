@@ -58,3 +58,6 @@ next-env.d.ts
 /.dev.vars
 
 *.tsbuildinfo
+
+# Netlify local state and deploy artifacts
+/.netlify/

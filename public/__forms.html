@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>상담 신청 양식</title>
+  </head>
+  <body>
+    <!-- Netlify scans this static declaration for the JavaScript-rendered form. -->
+    <form name="automation-consultation" method="POST" action="/__forms.html" data-netlify="true" data-netlify-honeypot="website" hidden>
+      <input type="hidden" name="form-name" value="automation-consultation" />
+      <input type="text" name="name" required minlength="2" maxlength="80" />
+      <input type="email" name="email" required maxlength="254" />
+      <input type="text" name="company" maxlength="100" />
+      <input type="text" name="service" required />
+      <input type="text" name="budget" required />
+      <textarea name="message" required minlength="20" maxlength="5000"></textarea>
+      <input type="checkbox" name="consent" value="true" required />
+      <input type="text" name="website" />
+      <input type="hidden" name="startedAt" />
+      <input type="hidden" name="requestId" />
+    </form>
+    <p>상담 신청은 <a href="/consultation">상담 페이지</a>에서 작성해 주세요.</p>
+  </body>
+</html>

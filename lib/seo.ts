@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
-export const SITE_URL = "https://forward-field-studio.abyys9114.chatgpt.site";
+const configuredUrl = process.env.SITE_URL || process.env.URL || "http://localhost:3000";
+export const SITE_URL = new URL(configuredUrl).origin;
 
 export function siteMetadata({ title, description, path }: { title: string; description: string; path: string }): Metadata {
   const fullTitle = title.includes("최진원") ? title : `${title} | 최진원`;
