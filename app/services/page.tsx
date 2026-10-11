@@ -2,7 +2,7 @@ import { BRAND_NAME } from "@/lib/brand";
 import Link from "next/link";
 import { ArrowUpRight, ChevronRight, Check, GraduationCap, HeartPulse, Factory, Table2, ShoppingBag, Package, Store, BriefcaseBusiness, Workflow, MessageCircle } from "lucide-react";
 import { SERVICE_CATALOG } from "@/lib/service-catalog";
-import { siteMetadata } from "@/lib/seo";
+import { siteMetadata, catalogJsonLd, safeJsonLd } from "@/lib/seo";
 import { SiteHeader, SiteFooter } from "../components/SiteChrome";
 import "./services.css";
 
@@ -18,12 +18,13 @@ const cardHeadlines = ["원생 관리부터\n수납 확인까지.", "반복되�
 
 export default function ServicesPage() {
   return <>
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(catalogJsonLd(SERVICE_CATALOG)) }} />
     <SiteHeader />
     <main id="main" className="industry-page">
       <div className="industry-announcement">첫 상담은 0원. 개발 비용은 상담 후 안내합니다.<Link href="/consultation">무료 상담 신청<ChevronRight size={14} aria-hidden="true" /></Link></div>
       <section className="section-wrap industry-intro">
         <div className="industry-intro-grid">
-          <div><p className="industry-kicker">{BRAND_NAME}의 업무 자동화</p><h1>업무 자동화.<br /><span>내 일에 꼭 맞게.</span></h1></div>
+          <div><p className="industry-kicker">{BRAND_NAME}의 업무 자동화</p><h1>업종별 업무 자동화.<br /><span>내 일에 꼭 맞게.</span></h1></div>
           <div className="industry-intro-note"><p>지금 쓰는 도구는 익숙하게.<br />반복되는 일은 더 간결하게.</p><Link href="/consultation"><MessageCircle size={21} aria-hidden="true" /><span>어디서 시작할지 고민된다면<br /><strong>직접 상담하기<ChevronRight size={15} aria-hidden="true" /></strong></span></Link></div>
         </div>
         <nav className="industry-categories" aria-label="업종 바로가기">

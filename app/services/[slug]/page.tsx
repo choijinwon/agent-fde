@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowDown, ArrowRight, ArrowUpRight, Check } from "lucide-react";
 import { SERVICE_CATALOG, findServiceBySlug } from "@/lib/service-catalog";
+import { SERVICE_GUIDES } from "@/lib/service-guides";
 import { siteMetadata, serviceJsonLd, safeJsonLd } from "@/lib/seo";
 import { SiteHeader, SiteFooter } from "../../components/SiteChrome";
 import "../services.css";
@@ -22,6 +23,8 @@ export async function generateMetadata({ params }: DetailPageProps) {
 export default async function ServiceDetailPage({ params }: DetailPageProps) {
   const offering = findServiceBySlug((await params).slug);
   if (!offering) notFound();
+  const guide = SERVICE_GUIDES[offering.slug];
+  const relatedServices = guide.relatedSlugs.map(slug => findServiceBySlug(slug)).filter(item => item !== undefined);
   const applicationHref = `/consultation?service=${offering.slug}`;
 
   return <>
@@ -36,6 +39,10 @@ export default async function ServiceDetailPage({ params }: DetailPageProps) {
 
       <div className="section-wrap industry-detail-layout">
         <div className="industry-detail-content">
+          <section className="industry-problem" aria-labelledby="problem-title">
+            <h2 id="problem-title">{guide.problem.title}</h2>
+            <p>{guide.problem.description}</p>
+          </section>
           <section className="industry-task-section" aria-labelledby="possible-tasks-title">
             <div className="industry-section-top"><h2 id="possible-tasks-title">이런 업무를 연결할 수 있습니다.</h2><span>적용 예시</span></div>
             <ol className="industry-task-list">{offering.tasks.map((task, index) => <li key={task}><span aria-hidden="true">0{index + 1}</span><h3>{task}</h3></li>)}</ol>
@@ -43,19 +50,28 @@ export default async function ServiceDetailPage({ params }: DetailPageProps) {
 
           <section className="industry-flow-section" aria-labelledby="workflow-title">
             <p className="industry-kicker">쓰던 자료에서, 필요한 결과로</p>
-            <h2 id="workflow-title">업무 흐름을 먼저 살펴봅니다.</h2>
+            <h2 id="workflow-title">{guide.workflow.title}</h2>
             <div className="industry-flow">
-              <div className="industry-flow-step"><span className="industry-flow-label">01 · 자료 모으기</span><h3>지금 사용하는 자료</h3><ul>{offering.inputs.map(input => <li key={input}>{input}</li>)}</ul></div>
+              <div className="industry-flow-step"><span className="industry-flow-label">01 · 자료 모으기</span><h3>지금 사용하는 자료</h3><p>{guide.workflow.input}</p><ul>{offering.inputs.map(input => <li key={input}>{input}</li>)}</ul></div>
               <div className="industry-flow-arrow" aria-hidden="true"><ArrowDown size={20} strokeWidth={1.3} /></div>
-              <div className="industry-flow-step industry-flow-middle"><span className="industry-flow-label">02 · 기준 연결하기</span><h3>업무 규칙에 맞춰 정리</h3><p>양식과 기준을 맞추고,<br />중복·누락·예외 확인 대상을 구분합니다.</p></div>
+              <div className="industry-flow-step industry-flow-middle"><span className="industry-flow-label">02 · 기준 연결하기</span><h3>업무 규칙에 맞춰 정리</h3><p>{guide.workflow.rules}</p></div>
               <div className="industry-flow-arrow" aria-hidden="true"><ArrowDown size={20} strokeWidth={1.3} /></div>
-              <div className="industry-flow-step"><span className="industry-flow-label">03 · 확인하고 활용하기</span><h3>검토할 수 있는 결과물</h3><p>담당자가 확인할 목록과 현황을 만들고,<br />합의한 다음 업무로 연결합니다.</p></div>
+              <div className="industry-flow-step"><span className="industry-flow-label">03 · 확인하고 활용하기</span><h3>검토할 수 있는 결과물</h3><p>{guide.workflow.output}</p></div>
             </div>
             <p className="industry-examples-note">위 흐름은 구성 예시입니다. 상세 단계와 결과물은 상담에서 함께 정합니다.</p>
           </section>
 
           <section className="industry-review-section" aria-labelledby="review-title"><span aria-hidden="true"><Check size={21} strokeWidth={1.4} /></span><div><h2 id="review-title">함께 확인할 부분</h2><p>{offering.reviewNote}</p></div></section>
           <section className="industry-preparation"><h2>상담 전에 준비하면 좋은 것</h2><p>가장 자주 반복하는 작업, 사용 중인 프로그램, 원하는 결과를 알려주세요. 자료를 미리 정리하지 않아도 현재의 업무 방식부터 설명해 주시면 됩니다.</p><Link href="/services" className="text-link">다른 업종도 살펴보기<ArrowRight size={17} aria-hidden="true" /></Link></section>
+          <section className="industry-faq" aria-labelledby="service-faq-title">
+            <p className="industry-kicker">상담 전에 궁금한 점</p>
+            <h2 id="service-faq-title">{offering.service} 자주 묻는 질문</h2>
+            <div className="industry-faq-list">{guide.faqs.map(faq => <details key={faq.question}><summary>{faq.question}<span aria-hidden="true">+</span></summary><p>{faq.answer}</p></details>)}</div>
+          </section>
+          <section className="industry-related" aria-labelledby="related-services-title">
+            <h2 id="related-services-title">함께 살펴볼 자동화</h2>
+            <div className="industry-related-grid">{relatedServices.map(item => <Link key={item.slug} href={`/services/${item.slug}`}><h3>{item.service}<ArrowUpRight size={18} aria-hidden="true" /></h3><p>{item.description}</p></Link>)}</div>
+          </section>
         </div>
 
         <aside className="industry-consultation" aria-label="무료 초기 상담 안내">
