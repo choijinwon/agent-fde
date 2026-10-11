@@ -64,6 +64,7 @@
 .site-chrome-header .desktop-nav {
   display: flex;
   align-items: center;
+  flex-shrink: 0;
   margin: 0;
   gap: 24px;
   color: #424245;
@@ -75,6 +76,8 @@
 .site-chrome-header .desktop-nav a {
   display: flex;
   align-items: center;
+  gap: 6px;
+  white-space: nowrap;
   min-height: 44px;
   padding: 10px 0;
   transition: color .18s ease;
@@ -190,7 +193,7 @@
 
 @media (max-width: 1100px) and (min-width: 981px) {
   .site-chrome-header .header-inner { gap: 20px; padding: 0 32px; }
-  .site-chrome-header .desktop-nav { gap: 22px; }
+  .site-chrome-header .desktop-nav { gap: 18px; }
   .site-chrome-header .personal-brand-role { display: none; }
   .site-footer.site-chrome-footer { padding-right: 32px; padding-left: 32px; }
 }

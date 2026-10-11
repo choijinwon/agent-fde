@@ -3,15 +3,16 @@
 import Link from "next/link";
 import { BRAND_NAME, BRAND_ENGLISH_NAME, BRAND_TAGLINE } from "@/lib/brand";
 import { useEffect, useId, useRef, useState } from "react";
-import { ArrowUpRight, Menu, X } from "lucide-react";
+import { ArrowUpRight, ExternalLink, Menu, X } from "lucide-react";
 import "./site-chrome.css";
 import { useCommunityAuth } from "./CommunityAuth";
 
 const contactEmail = "abyys1004@naver.com";
-const navigation = [
+const navigation: { label: string; href: string; external?: boolean }[] = [
   { label: "무료 진단", href: "/diagnosis" },
   { label: "업종별 상담", href: "/services" },
   { label: "개발 사례", href: "/cases" },
+  { label: "AI 개발 도구", href: "https://oscode.workauto.co.kr/", external: true },
   { label: "커뮤니티", href: "/community" },
 ];
 
@@ -71,7 +72,18 @@ export function SiteHeader() {
         <div className="header-inner">
           <SiteBrand showIcon />
           <nav className="desktop-nav" aria-label="주 메뉴">
-            {navigation.map(item => <Link href={item.href} key={item.href}>{item.label}</Link>)}
+            {navigation.map(item => item.external ? (
+              <a
+                href={item.href}
+                key={item.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${item.label} · OSCODE (새 탭에서 열림)`}
+                title="OSCODE · 새 탭에서 열림"
+              >
+                {item.label}<ExternalLink size={13} aria-hidden="true" />
+              </a>
+            ) : <Link href={item.href} key={item.href}>{item.label}</Link>)}
             <Link href={user ? "/account" : "/account/login"}>{user ? "내 활동" : "로그인"}</Link>
           </nav>
           <Link href="/consultation" className="header-cta">
@@ -90,7 +102,19 @@ export function SiteHeader() {
           </button>
         </div>
         <nav id={menuId} className="mobile-nav chrome-mobile-nav" aria-label="모바일 메뉴" hidden={!menuOpen}>
-          {navigation.map(item => (
+          {navigation.map(item => item.external ? (
+            <a
+              href={item.href}
+              key={item.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`${item.label} · OSCODE (새 탭에서 열림)`}
+              title="OSCODE · 새 탭에서 열림"
+              onClick={() => setMenuOpen(false)}
+            >
+              {item.label}<ExternalLink size={18} aria-hidden="true" />
+            </a>
+          ) : (
             <Link href={item.href} key={item.href} onClick={() => setMenuOpen(false)}>
               {item.label}<ArrowUpRight size={18} aria-hidden="true" />
             </Link>
