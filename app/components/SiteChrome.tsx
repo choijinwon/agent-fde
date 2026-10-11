@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { BRAND_NAME, BRAND_ENGLISH_NAME, BRAND_TAGLINE } from "@/lib/brand";
 import { useEffect, useId, useRef, useState } from "react";
 import { ArrowUpRight, Menu, X } from "lucide-react";
@@ -8,21 +9,22 @@ import { useCommunityAuth } from "./CommunityAuth";
 
 const contactEmail = "abyys1004@naver.com";
 const navigation = [
-  { label: "소개·경력", href: "/#about" },
+  { label: "무료 진단", href: "/diagnosis" },
   { label: "업종별 상담", href: "/services" },
+  { label: "개발 사례", href: "/cases" },
   { label: "커뮤니티", href: "/community" },
 ];
 
 function SiteBrand({ showIcon = false }: { showIcon?: boolean }) {
   return (
-    <a className="brand" href="/#home" aria-label={`${BRAND_NAME} 홈페이지 처음으로`}>
+    <Link className="brand" href="/#home" aria-label={`${BRAND_NAME} 홈페이지 처음으로`}>
       {showIcon && <svg className="brand-icon" width="32" height="32" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
         <rect width="64" height="64" rx="17" fill="#0071e3" />
         <path d="m12 20 8 25 12-22 12 22 8-25" fill="none" stroke="#fff" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
       </svg>}
       <span className="personal-brand-name">{BRAND_NAME}</span>
       <span className="personal-brand-role">{BRAND_ENGLISH_NAME}</span>
-    </a>
+    </Link>
   );
 }
 
@@ -47,7 +49,7 @@ export function SiteHeader() {
         setMenuOpen(false);
       }
     }
-    const desktop = window.matchMedia("(min-width: 721px)");
+    const desktop = window.matchMedia("(min-width: 981px)");
     function onViewportChange() {
       if (desktop.matches) setMenuOpen(false);
     }
@@ -69,12 +71,12 @@ export function SiteHeader() {
         <div className="header-inner">
           <SiteBrand showIcon />
           <nav className="desktop-nav" aria-label="주 메뉴">
-            {navigation.map(item => <a href={item.href} key={item.href}>{item.label}</a>)}
-            <a href={user ? "/account" : "/account/login"}>{user ? "내 활동" : "로그인"}</a>
+            {navigation.map(item => <Link href={item.href} key={item.href}>{item.label}</Link>)}
+            <Link href={user ? "/account" : "/account/login"}>{user ? "내 활동" : "로그인"}</Link>
           </nav>
-          <a href="/consultation" className="header-cta">
+          <Link href="/consultation" className="header-cta">
             무료 상담 신청 <ArrowUpRight size={16} aria-hidden="true" />
-          </a>
+          </Link>
           <button
             type="button"
             className="menu-toggle"
@@ -89,14 +91,14 @@ export function SiteHeader() {
         </div>
         <nav id={menuId} className="mobile-nav chrome-mobile-nav" aria-label="모바일 메뉴" hidden={!menuOpen}>
           {navigation.map(item => (
-            <a href={item.href} key={item.href} onClick={() => setMenuOpen(false)}>
+            <Link href={item.href} key={item.href} onClick={() => setMenuOpen(false)}>
               {item.label}<ArrowUpRight size={18} aria-hidden="true" />
-            </a>
+            </Link>
           ))}
-          <a href={user ? "/account" : "/account/login"} onClick={() => setMenuOpen(false)}>{user ? "내 활동" : "로그인·회원가입"}<ArrowUpRight size={18} aria-hidden="true" /></a>
-          <a className="chrome-mobile-consultation" href="/consultation" onClick={() => setMenuOpen(false)}>
+          <Link href={user ? "/account" : "/account/login"} onClick={() => setMenuOpen(false)}>{user ? "내 활동" : "로그인·회원가입"}<ArrowUpRight size={18} aria-hidden="true" /></Link>
+          <Link className="chrome-mobile-consultation" href="/consultation" onClick={() => setMenuOpen(false)}>
             무료 상담 신청 <ArrowUpRight size={18} aria-hidden="true" />
-          </a>
+          </Link>
           <p className="chrome-mobile-note">첫 상담 0원 · 개발 비용은 상담 후 안내합니다.</p>
         </nav>
       </header>
@@ -113,10 +115,13 @@ export function SiteFooter() {
         <a className="footer-email" href={`mailto:${contactEmail}`}>{contactEmail}</a>
       </div>
       <div className="footer-right">
-        <div className="footer-links">
-          <a href="/community/guide">커뮤니티 이용 안내</a>
-          <a href="/admin">문의 관리</a>
-          <a href="/#home">처음으로 <ArrowUpRight size={15} aria-hidden="true" /></a>
+          <div className="footer-links">
+          <Link href="/calculator">절감 시간 계산</Link>
+          <Link href="/requests">내 의뢰 현황</Link>
+          <Link href="/#about">소개·경력</Link>
+          <Link href="/community/guide">커뮤니티 이용 안내</Link>
+          <Link href="/admin">문의 관리</Link>
+          <Link href="/#home">처음으로 <ArrowUpRight size={15} aria-hidden="true" /></Link>
         </div>
         <span>© 2026 {BRAND_ENGLISH_NAME}. All rights reserved.</span>
       </div>

@@ -15,6 +15,8 @@ export default function AdminPage() {
     <p>이 사이트를 관리하는 Netlify 계정으로 로그인한 뒤, Forms에서 automation-consultation 양식을 선택해 주세요. 정상 접수와 스팸으로 분류된 요청을 함께 확인할 수 있습니다.</p>
     <a className="adm-button" href={dashboardUrl} target="_blank" rel="noopener noreferrer">Netlify 문의함 열기 ↗</a>
     <p>문의 내용은 공개하지 않습니다. 이메일 답변과 보관된 개인정보의 삭제는 운영자가 Netlify 관리 화면에서 직접 처리합니다.</p>
+    <p>사이트에서 가입·이메일 인증을 마치고 운영자 권한을 받은 계정은 의뢰 진행 단계와 고객 안내를 관리할 수 있습니다.</p>
+    <Link className="adm-button" href="/requests/manage">의뢰 진행 관리 →</Link>
     <Link className="adm-home" href="/">홈페이지로 돌아가기</Link>
   </div></main>;
 }

@@ -17,6 +17,7 @@ export function encodeNetlifyConsultation(input: InquiryInput, startedAt: number
     website: "",
     startedAt: String(startedAt),
     requestId: input.requestId,
+    trackingContext: process.env.NEXT_PUBLIC_REQUEST_CONTEXT || "preview",
   }).toString();
 }
 

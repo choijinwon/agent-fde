@@ -14,7 +14,11 @@ const communityStore = context === "production"
 
 const nextConfig: NextConfig = {
   turbopack: { root: process.cwd() },
-  env: { WORKAUTO_COMMUNITY_STORE: communityStore },
+  env: {
+    WORKAUTO_COMMUNITY_STORE: communityStore,
+    WORKAUTO_REQUEST_STORE: context === "production" ? "workauto-requests" : previewContext && process.env.DEPLOY_ID ? `workauto-requests-${createHash("sha256").update(process.env.DEPLOY_ID).digest("hex").slice(0, 16)}` : "",
+    NEXT_PUBLIC_REQUEST_CONTEXT: context === "production" ? "production" : "preview",
+  },
 };
 
 export default nextConfig;

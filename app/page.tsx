@@ -5,6 +5,7 @@ import { ArrowRight, ArrowUpRight, Check, GraduationCap, Factory, Building2, Fil
 import WorkflowDesk from "./components/WorkflowDesk";
 import HomeExamples from "./components/HomeExamples";
 import CareerSection from "./components/CareerSection";
+import HomeTools from "./components/HomeTools";
 import { SiteHeader, SiteFooter } from "./components/SiteChrome";
 import { SERVICE_CATALOG } from "@/lib/service-catalog";
 import { webPageJsonLd, safeJsonLd } from "@/lib/seo";
@@ -32,6 +33,7 @@ export default function Home() {
         <div className="hero-visual"><WorkflowDesk/></div>
       </section>
       <div className="principles section-wrap"><div className="principle-intro">복잡한 기술은 뒤로.<br/><strong>변화는 업무의 앞에.</strong></div><div className="principle"><span>지금 쓰는 도구</span><p>쓰던 도구와 연결</p></div><div className="principle"><span>부담 없는 시작</span><p>작은 업무부터 시작</p></div><div className="principle"><span>꾸준한 운영</span><p>운영을 생각하는 설계</p></div></div>
+      <HomeTools/>
       <CareerSection/>
       <section className="services-section section-wrap section-space" id="services"><div className="section-heading"><div><div className="eyebrow section-label">함께할 수 있는 일</div><h2>필요한 곳에서 시작해,<br/>실제 변화까지.</h2></div><p>학원·병원·제조업부터 유통·일반 사무까지.<br/>업종과 도구에 맞춰 반복 업무를 살피고<br/>원하는 분야를 골라 상담을 신청하세요.</p></div><p className="service-pricing-note"><span>첫 상담 0원</span>개발 범위와 비용은 상담 후 안내합니다.</p><div className="services-grid">{offerings.map(({ icon: Icon, number, title, description, tags }) => <a href={detailHref(title)} className={`service-card${title === "기타 맞춤 자동화" ? " service-card-wide" : ""}`} key={number}><div className="service-card-top"><Icon size={26} strokeWidth={1.4}/><span>{number}</span></div><div className="service-card-title"><h3>{title}</h3></div><p>{description}</p><div className="service-tags">{tags.map(tag => <span key={tag}>{tag}</span>)}</div><div className="service-apply-row"><div className="service-fee"><span>첫 상담</span><strong>0<small>원</small></strong></div><span className="service-apply-label">상담 내용 보기 <ArrowUpRight size={18}/></span></div></a>)}</div><Link className="all-services-link" href="/services">쇼핑몰·유통, 물류, 매장 등 전체 분야 보기 <ArrowUpRight size={18}/></Link></section>
       <HomeExamples/>

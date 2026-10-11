@@ -6,7 +6,8 @@ const base = new URL(process.argv[2] || "https://workauto.co.kr");
 const canonicalOrigin = "https://workauto.co.kr";
 const local = ["localhost", "127.0.0.1", "[::1]"].includes(base.hostname);
 const serviceSlugs = ["academy", "hospital", "manufacturing", "excel-accounting", "commerce", "logistics", "store", "office", "custom"];
-const landingPaths = ["/", "/services", "/community", "/community/guide", ...serviceSlugs.map(slug => `/services/${slug}`)];
+const caseSlugs = ["smart-factory", "design-learning", "ai-agent-data"];
+const landingPaths = ["/", "/services", "/diagnosis", "/calculator", "/cases", ...caseSlugs.map(slug => `/cases/${slug}`), "/community", "/community/guide", ...serviceSlugs.map(slug => `/services/${slug}`)];
 const postPath = /^\/community\/[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const decode = value => value.replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#x27;|&#39;/g, "'");
 const attr = (tag, name) => decode(tag.match(new RegExp(`\\b${name}="([^"]*)"`, "i"))?.[1] || "");
@@ -33,7 +34,7 @@ assert.equal(sitemap.response.status, 200, "sitemap status");
 assert.match(sitemap.response.headers.get("content-type") || "", /xml/);
 assert.match(sitemap.html, /xmlns="http:\/\/www.sitemaps.org\/schemas\/sitemap\/0.9"/);
 const locations = [...sitemap.html.matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => match[1]);
-assert.ok(locations.length >= landingPaths.length, "13 public landing pages plus published community posts in sitemap");
+assert.ok(locations.length >= landingPaths.length, "19 public landing pages plus published community posts in sitemap");
 assert.equal(new Set(locations).size, locations.length, "no duplicate sitemap URLs");
 for (const path of landingPaths) assert.ok(locations.includes(`${canonicalOrigin}${path}`), `${path} included in sitemap`);
 const publishedPostLocations = locations.filter(location => !landingPaths.includes(new URL(location).pathname));
@@ -103,13 +104,13 @@ for (const location of locations) {
 }
 assert.equal(faqs, serviceSlugs.length * 3, "all nine industry pages retain three rendered FAQ answers");
 assert.equal(relatedLinks, serviceSlugs.length * 2, "all nine industry pages retain two related links");
-for (const path of ["/consultation", "/consultation?service=academy", "/admin", "/account", "/account/login", "/account/login?mode=signup", "/community/new", "/community/manage"]) {
+for (const path of ["/consultation", "/consultation?service=academy", "/admin", "/account", "/account/login", "/account/login?mode=signup", "/community/new", "/community/manage", "/requests", "/requests/manage"]) {
   const { response, html } = await get(path);
   assert.equal(response.status, 200);
   assert.match(attr(meta(html, "robots"), "content"), /noindex/i, `${path} excluded from search`);
   assert.ok(!locations.some(location => new URL(location).pathname === new URL(path, base).pathname));
 }
-for (const path of ["/services/not-a-real-service", "/community/not-a-real-post", "/not-a-real-page"]) {
+for (const path of ["/services/not-a-real-service", "/cases/not-a-real-case", "/community/not-a-real-post", "/not-a-real-page"]) {
   const { response } = await get(path);
   assert.equal(response.status, 404, `${path} real 404`);
 }
@@ -123,6 +124,17 @@ const anonymousPost = await api("/api/community/posts", 401, { method: "POST", h
 assert.equal(anonymousPost.code, "authentication_required", "same-origin anonymous writing denied");
 const crossOriginPost = await api("/api/community/posts", 403, { method: "POST", headers: { "Content-Type": "application/json", Origin: "https://unrelated.invalid" }, body: postInput });
 assert.equal(crossOriginPost.code, "invalid_origin", "cross-origin writing denied");
+
+for (const path of ["/api/requests", "/api/requests/manage"]) {
+  assert.equal((await api(path, 401)).code, "authentication_required", `${path} anonymous access denied`);
+}
+const requestPath = `/api/requests/${"a".repeat(64)}`;
+for (const method of ["PATCH", "DELETE"]) {
+  const headers = { "Content-Type": "application/json", Origin: base.origin };
+  const options = { method, headers, ...(method === "PATCH" ? { body: JSON.stringify({ stage: "completed", note: "", updatedAt: new Date().toISOString() }) } : {}) };
+  assert.equal((await api(requestPath, 401, options)).code, "authentication_required", `anonymous request ${method} denied`);
+  assert.equal((await api(requestPath, 403, { ...options, headers: { ...headers, Origin: "https://unrelated.invalid" } })).code, "invalid_origin", `cross-origin request ${method} denied`);
+}
 
 let publicList = await api("/api/community/posts");
 assert.equal(typeof publicList.available, "boolean", "community storage availability is explicit");
@@ -150,4 +162,4 @@ assert.deepEqual([...publicPostIds].sort(), publishedPostLocations.map(location 
 const font = await fetch(new URL("/fonts/pretendard-variable-1.3.9.woff2", base));
 assert.equal(font.status, 200, "self-hosted font served");
 assert.equal(Buffer.from(await font.arrayBuffer()).subarray(0, 4).toString(), "wOF2");
-console.log(JSON.stringify({ base: base.origin, landingPages: landingPaths.length, publishedPosts: publicPostIds.size, publicPages: locations.length, uniqueTitles: titles.size, uniqueDescriptions: descriptions.size, renderedFaqs: faqs, relatedLinks, sitemap: "pass", robots: "pass", excludedPages: "pass", notFoundStatus: "pass", structuredData: "pass", anonymousCommunityAccess: "pass", communityStorage: storageAvailable ? "connected" : "local unavailable", font: "pass" }, null, 2));
+console.log(JSON.stringify({ base: base.origin, landingPages: landingPaths.length, publishedPosts: publicPostIds.size, publicPages: locations.length, uniqueTitles: titles.size, uniqueDescriptions: descriptions.size, renderedFaqs: faqs, relatedLinks, sitemap: "pass", robots: "pass", excludedPages: "pass", notFoundStatus: "pass", structuredData: "pass", anonymousCommunityAccess: "pass", anonymousRequestAccess: "pass", communityStorage: storageAvailable ? "connected" : "local unavailable", font: "pass" }, null, 2));
