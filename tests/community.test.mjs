@@ -67,6 +67,36 @@ test("all cookie-authenticated mutations reject absent and cross-site Origin", (
   assert.doesNotThrow(() => assertCommunityOrigin(new Request(url, { headers: { origin: "https://workauto.co.kr" } })));
 });
 
+test("Next localhost normalization permits only matching loopback Host during local development", () => {
+  const previousMode = process.env.NODE_ENV;
+  const previousNetlify = process.env.NETLIFY;
+  const localRequest = headers => new Request("http://localhost:3000/api/community/posts", { headers });
+  try {
+    process.env.NODE_ENV = "development";
+    delete process.env.NETLIFY;
+    assert.doesNotThrow(() => assertCommunityOrigin(localRequest({ origin: "http://127.0.0.1:3000", host: "127.0.0.1:3000" })));
+    for (const headers of [
+      { origin: "http://127.0.0.1:3001", host: "127.0.0.1:3001" },
+      { origin: "https://127.0.0.1:3000", host: "127.0.0.1:3000" },
+      { origin: "http://evil.example:3000", host: "evil.example:3000" },
+      { origin: "http://127.0.0.1:3000", "x-forwarded-host": "127.0.0.1:3000" },
+      { origin: "http://127.0.0.1:3000", host: "127.0.0.1:3000", "sec-fetch-site": "cross-site" },
+    ]) assert.throws(() => assertCommunityOrigin(localRequest(headers)), error => error.status === 403);
+    process.env.NODE_ENV = "production";
+    assert.throws(() => assertCommunityOrigin(localRequest({ origin: "http://127.0.0.1:3000", host: "127.0.0.1:3000" })), error => error.status === 403);
+    process.env.NODE_ENV = "development";
+    process.env.NETLIFY = "true";
+    assert.throws(() => assertCommunityOrigin(localRequest({ origin: "http://127.0.0.1:3000", host: "127.0.0.1:3000" })), error => error.status === 403);
+    for (const origin of ["https://workauto.co.kr", "https://community-review--agent-fde.netlify.app"]) {
+      assert.doesNotThrow(() => assertCommunityOrigin(new Request(`${origin}/api/community/posts`, { headers: { origin } })));
+      assert.throws(() => assertCommunityOrigin(new Request(`${origin}/api/community/posts`, { headers: { origin: "https://attacker.example", host: "attacker.example", "x-forwarded-host": "attacker.example" } })), error => error.status === 403);
+    }
+  } finally {
+    if (previousMode === undefined) delete process.env.NODE_ENV; else process.env.NODE_ENV = previousMode;
+    if (previousNetlify === undefined) delete process.env.NETLIFY; else process.env.NETLIFY = previousNetlify;
+  }
+});
+
 test("JSON body limit checks streamed bytes even if Content-Length lies", async () => {
   const request = (body, headers = {}) => new Request("https://workauto.co.kr/api/community/posts", { method: "POST", body, headers: { "content-type": "application/json", ...headers } });
   assert.deepEqual(await readCommunityJson(request(JSON.stringify(input()))), input());

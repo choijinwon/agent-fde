@@ -99,7 +99,20 @@ export function assertPostOwner(post: Pick<CommunityPost, "authorId">, user: Com
 
 export function assertCommunityOrigin(request: Request): void {
   const origin = request.headers.get("origin");
-  if (!origin || origin !== new URL(request.url).origin || request.headers.get("sec-fetch-site") === "cross-site") {
+  const requestUrl = new URL(request.url);
+  let localDevelopmentOrigin = false;
+  // Next's local development server canonicalizes Request.url to localhost even
+  // when bound to 127.0.0.1. Accept only that literal loopback alias, using the
+  // actual Host header and matching scheme/port. Hosted requests stay exact-match.
+  if (origin && process.env.NODE_ENV !== "production" && !process.env.NETLIFY) {
+    try {
+      const source = new URL(origin);
+      const loopback = new Set(["localhost", "127.0.0.1"]);
+      localDevelopmentOrigin = origin === source.origin && loopback.has(requestUrl.hostname) && loopback.has(source.hostname)
+        && source.protocol === requestUrl.protocol && source.port === requestUrl.port && source.host === request.headers.get("host");
+    } catch { /* Invalid origins fail the strict check below. */ }
+  }
+  if (!origin || origin !== requestUrl.origin && !localDevelopmentOrigin || request.headers.get("sec-fetch-site") === "cross-site") {
     throw new CommunityError("허용되지 않은 요청입니다.", 403, "invalid_origin");
   }
 }
