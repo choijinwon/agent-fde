@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { BRAND_NAME, BRAND_ENGLISH_NAME, BRAND_TAGLINE } from "./brand";
 
-const configuredUrl = process.env.SITE_URL || process.env.URL || "http://localhost:3000";
-export const SITE_URL = new URL(configuredUrl).origin;
+// Keep canonical URLs stable across local, preview, and production builds.
+export const SITE_URL = "https://workauto.co.kr";
 
 export function siteMetadata({ title, description, path }: { title: string; description: string; path: string }): Metadata {
   const fullTitle = title.includes(BRAND_NAME) ? title : `${title} | ${BRAND_NAME}`;
@@ -25,7 +25,7 @@ export const websiteJsonLd = {
   "@context": "https://schema.org",
   "@graph": [
     { "@type": "Person", "@id": `${SITE_URL}/#person`, name: "최진원", url: SITE_URL, jobTitle: "업무 자동화 · AI 엔지니어", email: "abyys1004@naver.com", knowsAbout: ["업무 자동화", "AI 에이전트", "스마트팩토리", "ERP 연동", "웹 서비스 개발"] },
-    { "@type": "Brand", "@id": `${SITE_URL}/#brand`, name: BRAND_NAME, alternateName: BRAND_ENGLISH_NAME, slogan: BRAND_TAGLINE, url: SITE_URL },
+    { "@type": "Brand", "@id": `${SITE_URL}/#brand`, name: BRAND_NAME, alternateName: BRAND_ENGLISH_NAME, slogan: BRAND_TAGLINE, url: SITE_URL, logo: `${SITE_URL}/favicon.svg` },
     { "@type": "WebSite", "@id": `${SITE_URL}/#website`, name: BRAND_NAME, alternateName: BRAND_ENGLISH_NAME, description: `${BRAND_NAME}의 업종별 업무 자동화와 AI 개발 서비스`, url: SITE_URL, inLanguage: "ko-KR", about: { "@id": `${SITE_URL}/#brand` }, publisher: { "@id": `${SITE_URL}/#person` } },
   ],
 };

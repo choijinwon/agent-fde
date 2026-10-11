@@ -2,7 +2,7 @@
 
 워크오토의 업종별 자동화 서비스와 개발자 최진원의 경력을 소개하고, 프로젝트 상담을 접수하는 홈페이지입니다. Next.js, React, TypeScript로 구성하며 Netlify에 배포합니다.
 
-[홈페이지](https://agent-fde.netlify.app) · [상담 문의함](https://app.netlify.com/projects/agent-fde/forms)
+[홈페이지](https://workauto.co.kr) · [상담 문의함](https://app.netlify.com/projects/agent-fde/forms)
 
 Netlify에 공개 배포했습니다. 상담 문의함은 해당 Netlify 프로젝트에 권한이 있는 계정으로 로그인해야 열 수 있습니다. GitHub `main` 브랜치와 배포 연결을 구성했습니다.
 
@@ -73,9 +73,11 @@ npm start
 
 ## 사이트 주소와 검색 설정
 
-`SITE_URL`은 선택 환경변수입니다. 사용자 도메인을 연결할 때 `https://example.com`과 같은 전체 주소를 설정합니다. 미설정 시 Netlify가 제공하는 `URL` 환경변수를 사용하며, 로컬에서는 개발 주소를 사용합니다.
+검색용 대표 주소는 `lib/seo.ts`의 `SITE_URL`에 `https://workauto.co.kr`로 고정합니다. 로컬 또는 미리보기 빌드의 주소가 검색용 대표 주소에 섞이지 않도록 환경변수 `URL`을 사용하지 않습니다.
 
 `lib/seo.ts`에서 이 주소를 기반으로 canonical, 공유 URL, 구조화 데이터와 사이트맵 주소를 구성합니다. 도메인 변경 후에는 다시 빌드·배포하고 각 URL이 새 주소를 가리키는지 확인합니다.
+
+`netlify.toml`에서 기존 `agent-fde.netlify.app` 주소를 경로와 쿼리를 유지한 채 새 도메인으로 301 이동합니다. Google Search Console의 `workauto.co.kr` 도메인 속성에 제출할 사이트맵은 `https://workauto.co.kr/sitemap.xml`입니다. 업종별 검색 제목과 설명은 `lib/service-catalog.ts`에서 관리합니다. 관리자 안내 페이지는 검색 로봇이 `noindex`를 읽을 수 있도록 robots.txt로 차단하지 않습니다.
 
 검색엔진은 접근 가능한 배포 페이지를 수집할 수 있습니다. 배포 후 사이트맵과 검색 수집 상태를 확인해야 하며, 검색 순위나 노출을 보장하지 않습니다.
 
@@ -85,7 +87,7 @@ npm start
 
 - Next.js 운영 빌드·TypeScript 검사 및 테스트 10개 통과
 - 11개 검색 대상 페이지의 정상 응답·고유 제목·설명·대표 주소·구조화 데이터 확인
-- 사이트맵과 robots.txt의 Netlify 주소, 상담 페이지 noindex, 없는 서비스 404 확인
+- 사이트맵과 robots.txt의 대표 도메인 주소, 상담 페이지 noindex, 없는 서비스 404 확인
 - 모바일 360px 메뉴 이동과 서비스 목록 표시, 가로 넘침 없음 확인
 - 실제 상담 화면에서 테스트 접수 후 Netlify Forms 저장 확인 및 테스트 데이터 삭제
 

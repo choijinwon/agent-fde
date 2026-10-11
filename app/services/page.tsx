@@ -7,8 +7,8 @@ import { SiteHeader, SiteFooter } from "../components/SiteChrome";
 import "./services.css";
 
 export const metadata = siteMetadata({
-  title: `업종별 업무 자동화 · 무료 상담 | ${BRAND_NAME}`,
-  description: "학원, 병원, 제조, 쇼핑몰, 물류, 매장과 일반 사무까지. 업무에 맞는 자동화를 살펴보고 0원 초기 상담을 신청하세요. 개발 비용은 상담 후 안내합니다.",
+  title: `업종별 업무 자동화 · 엑셀·ERP·운영 업무 | ${BRAND_NAME}`,
+  description: "학원 수납·출결, 병원 운영 행정, 제조 ERP, 엑셀·회계, 쇼핑몰 주문, 물류·재고, 매장과 사무 업무까지. 9개 분야의 자동화 적용 예시와 필요한 자료를 살펴보세요. 첫 상담은 무료이며 개발 비용은 상담 후 별도 안내합니다.",
   path: "/services",
 });
 
