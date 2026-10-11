@@ -1,5 +1,6 @@
 "use client";
 
+import { BRAND_NAME, BRAND_ENGLISH_NAME, BRAND_TAGLINE } from "@/lib/brand";
 import { useEffect, useId, useRef, useState } from "react";
 import { ArrowUpRight, Menu, X } from "lucide-react";
 import "./site-chrome.css";
@@ -11,11 +12,11 @@ const navigation = [
   { label: "진행 방식", href: "/#process" },
 ];
 
-function PersonalBrand() {
+function SiteBrand() {
   return (
-    <a className="brand" href="/#home" aria-label="최진원 홈페이지 처음으로">
-      <span className="personal-brand-name">최진원</span>
-      <span className="personal-brand-role">업무 자동화</span>
+    <a className="brand" href="/#home" aria-label={`${BRAND_NAME} 홈페이지 처음으로`}>
+      <span className="personal-brand-name">{BRAND_NAME}</span>
+      <span className="personal-brand-role">{BRAND_ENGLISH_NAME}</span>
     </a>
   );
 }
@@ -60,7 +61,7 @@ export function SiteHeader() {
       <a className="skip-link site-chrome-skip-link" href="#main">본문으로 바로가기</a>
       <header className="site-header site-chrome-header" data-menu-open={menuOpen} ref={headerRef}>
         <div className="header-inner">
-          <PersonalBrand />
+          <SiteBrand />
           <nav className="desktop-nav" aria-label="주 메뉴">
             {navigation.map(item => <a href={item.href} key={item.href}>{item.label}</a>)}
           </nav>
@@ -99,8 +100,8 @@ export function SiteFooter() {
   return (
     <footer className="site-footer section-wrap site-chrome-footer">
       <div>
-        <PersonalBrand />
-        <p>반복되는 일을 줄이고, 필요한 일에 집중하도록.</p>
+        <SiteBrand />
+        <p>{BRAND_TAGLINE}</p>
         <a className="footer-email" href={`mailto:${contactEmail}`}>{contactEmail}</a>
       </div>
       <div className="footer-right">
@@ -108,7 +109,7 @@ export function SiteFooter() {
           <a href="/admin">문의 관리</a>
           <a href="/#home">처음으로 <ArrowUpRight size={15} aria-hidden="true" /></a>
         </div>
-        <span>© 2026 최진원. All rights reserved.</span>
+        <span>© 2026 {BRAND_ENGLISH_NAME}. All rights reserved.</span>
       </div>
     </footer>
   );

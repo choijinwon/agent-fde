@@ -1,1 +1,20 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630"><rect width="1200" height="630" fill="#34332f"/><circle cx="1020" cy="350" r="210" fill="none" stroke="#c79b82" stroke-width="2"/><circle cx="1020" cy="350" r="140" fill="none" stroke="#c79b82" stroke-width="2"/><path d="M860 350h250m-70-70 70 70-70 70" fill="none" stroke="#c79b82" stroke-width="12"/><g fill="#f5f2eb" font-family="Arial, sans-serif"><text x="80" y="120" font-size="34" font-weight="bold">최진원 · 업무 자동화 엔지니어</text><text x="80" y="290" font-size="66" font-weight="bold">반복되는 업무,</text><text x="80" y="380" font-size="66" font-weight="bold">이제 자동화로.</text><text x="80" y="520" font-size="20" fill="#c79b82">BUSINESS PROCESS AUTOMATION</text></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#f5f5f7"/>
+  <rect x="68" y="65" width="61" height="61" rx="18" fill="#0071e3"/>
+  <path d="m80 84 8 23 11-20 11 20 8-23" fill="none" stroke="#fff" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <g font-family="Apple SD Gothic Neo, AppleGothic, sans-serif" fill="#1d1d1f">
+    <text x="149" y="108" font-size="36" font-weight="700">워크오토</text>
+    <text x="68" y="290" font-size="72" font-weight="700" letter-spacing="-3">반복은 줄이고,</text>
+    <text x="68" y="385" font-size="72" font-weight="700" letter-spacing="-3" fill="#0071e3">일에 여유를.</text>
+    <text x="71" y="458" font-size="25" fill="#6e6e73">업무 자동화 · AI 개발 · 첫 상담 0원</text>
+    <text x="71" y="555" font-family="Arial, sans-serif" font-size="19" letter-spacing="3" fill="#6e6e73">WORKAUTO</text>
+  </g>
+  <g transform="translate(842 151) rotate(7 127 159)">
+    <rect x="-26" y="33" width="263" height="320" rx="27" fill="#e0eaf8"/>
+    <rect width="269" height="318" rx="27" fill="#fff" stroke="#e5e5ea"/>
+    <circle cx="27" cy="26" r="3" fill="#d2d2d7"/><circle cx="39" cy="26" r="3" fill="#d2d2d7"/><circle cx="51" cy="26" r="3" fill="#d2d2d7"/>
+    <path d="M27 81h148M27 127h215M27 183h215M27 239h215" stroke="#e5e5ea" stroke-width="2"/>
+    <path d="M28 108h103M28 164h72M28 220h88M28 277h126" stroke="#d8e8ff" stroke-width="11" stroke-linecap="round"/>
+    <path d="m210 101 8 8 14-17m-22 66 8 8 14-17m-22 66 8 8 14-17m-22 66 8 8 14-17" stroke="#0071e3" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </g>
+</svg>

@@ -1,3 +1,4 @@
+import { BRAND_NAME } from "@/lib/brand";
 import { ArrowUpRight } from "lucide-react";
 import "./career-section.css";
 
@@ -14,10 +15,10 @@ export default function CareerSection() {
   return <section className="career-section section-space" id="about" aria-labelledby="career-title">
     <div className="section-wrap career-layout">
       <div className="career-intro">
-        <div className="eyebrow section-label">소개와 경력</div>
+        <div className="eyebrow section-label">{BRAND_NAME}를 만드는 사람</div>
         <h2 id="career-title">경험을 바탕으로,<br/>직접 만듭니다.</h2>
-        <div className="career-person"><strong>최진원</strong><span>업무 자동화 · AI 엔지니어</span></div>
-        <p className="career-description">2006년 웹 서비스 개발을 시작으로 교육, 제조, 금융, 헬스케어 분야의 시스템을 만들고 운영해 왔습니다.</p>
+        <div className="career-person"><strong>최진원</strong><span>운영자 · 업무 자동화 · AI 엔지니어</span></div>
+        <p className="career-description">{BRAND_NAME}의 운영자이자 개발자인 최진원은 2006년 웹 서비스 개발을 시작으로 교육, 제조, 금융, 헬스케어 분야의 시스템을 만들고 운영해 왔습니다.</p>
         <p className="career-description">최근에는 AI 에이전트와 사내 문서를 활용한 검색 기술로 반복 업무를 자동화하고 있습니다. 업무 분석부터 설계, 개발, 배포와 운영까지 직접 함께합니다.</p>
         <dl className="career-strengths">
           <div><dt>업무부터 이해합니다</dt><dd>사용하는 도구와 반복 작업, 예외를 살핍니다.</dd></div>
@@ -25,10 +26,10 @@ export default function CareerSection() {
           <div><dt>운영까지 생각합니다</dt><dd>배포와 모니터링, 유지보수 구조를 설계합니다.</dd></div>
         </dl>
         <p className="career-qualification">컴퓨터과학 학사 · 정보처리기사</p>
-        <a className="text-link career-contact" href="/consultation">최진원에게 무료 상담 신청 <ArrowUpRight size={17}/></a>
+        <a className="text-link career-contact" href="/consultation">{BRAND_NAME} 무료 상담 신청 <ArrowUpRight size={17}/></a>
       </div>
       <div className="career-history">
-        <div className="career-history-heading"><h3>주요 개발 경험</h3><span>최근 경력부터</span></div>
+        <div className="career-history-heading"><h3>최진원의 개발 경험</h3><span>최근 경력부터</span></div>
         <ol className="career-timeline">{experience.map(item => <li key={item.period}>
           <span className="career-period">{item.period}</span>
           <h4>{item.title}</h4>

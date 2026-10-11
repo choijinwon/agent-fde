@@ -1,6 +1,6 @@
-# 최진원 · 업무 자동화 홈페이지
+# 워크오토 (WORKAUTO) · 업무 자동화 홈페이지
 
-최진원의 개발 경력과 업종별 자동화 서비스를 소개하고, 프로젝트 상담을 접수하는 개인 홈페이지입니다. Next.js, React, TypeScript로 구성하며 Netlify에 배포합니다.
+워크오토의 업종별 자동화 서비스와 개발자 최진원의 경력을 소개하고, 프로젝트 상담을 접수하는 홈페이지입니다. Next.js, React, TypeScript로 구성하며 Netlify에 배포합니다.
 
 [홈페이지](https://agent-fde.netlify.app) · [상담 문의함](https://app.netlify.com/projects/agent-fde/forms)
 

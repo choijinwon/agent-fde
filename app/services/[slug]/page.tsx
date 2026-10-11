@@ -1,3 +1,4 @@
+import { BRAND_NAME } from "@/lib/brand";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowDown, ArrowRight, ArrowUpRight, Check } from "lucide-react";
@@ -14,8 +15,8 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: DetailPageProps) {
   const offering = findServiceBySlug((await params).slug);
-  if (!offering) return { title: "서비스를 찾을 수 없습니다 | 최진원" };
-  return siteMetadata({ title: `${offering.service} · 무료 상담 | 최진원`, description: `${offering.description} 첫 상담은 0원이며, 개발 비용은 상담 후 별도로 안내합니다.`, path: `/services/${offering.slug}` });
+  if (!offering) return { title: `서비스를 찾을 수 없습니다 | ${BRAND_NAME}` };
+  return siteMetadata({ title: `${offering.service} · 무료 상담 | ${BRAND_NAME}`, description: `${offering.description} 첫 상담은 0원이며, 개발 비용은 상담 후 별도로 안내합니다.`, path: `/services/${offering.slug}` });
 }
 
 export default async function ServiceDetailPage({ params }: DetailPageProps) {

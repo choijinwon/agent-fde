@@ -1,5 +1,6 @@
 "use client";
 
+import { BRAND_ENGLISH_NAME } from "@/lib/brand";
 import { useEffect, useRef, useState, type PointerEvent } from "react";
 import { Check, MoveUpRight } from "lucide-react";
 import "./workflow-desk.css";
@@ -103,7 +104,7 @@ export default function WorkflowDesk() {
         <div className="desk-scale">
           <div className="desk-ground-shadow" />
           <div className="desk-assembly" ref={assemblyRef}>
-            <div className="desk-folder"><span className="desk-folder-tab">업무 자료</span><span className="desk-folder-rule" /><span className="desk-folder-mark">최진원</span></div>
+            <div className="desk-folder"><span className="desk-folder-tab">업무 자료</span><span className="desk-folder-rule" /><span className="desk-folder-mark">{BRAND_ENGLISH_NAME}</span></div>
             <div className="desk-paper desk-source-paper">
               <div className="desk-paper-clip" />
               <span className="desk-paper-kicker">01 / 원본 자료</span>
