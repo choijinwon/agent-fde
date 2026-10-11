@@ -27,11 +27,13 @@ export default function ServicesPage() {
         <div className="industry-section-top"><h2 id="industry-list-title">어떤 일을 하고 계신가요?</h2><span>업종을 선택해 적용 예시를 살펴보세요.</span></div>
         <div className="industry-card-grid">
           {SERVICE_CATALOG.map((offering, index) => <article className="industry-card" key={offering.slug}>
+            <Link className="industry-card-link" href={`/services/${offering.slug}`} aria-labelledby={`service-${offering.slug}`}>
             <div className="industry-card-index"><span>{String(index + 1).padStart(2, "0")}</span><span>{offering.slug === "custom" ? "업무에 맞춰 함께" : "반복 업무부터 차근차근"}</span></div>
-            <h3><Link href={`/services/${offering.slug}`}>{offering.title}<ArrowUpRight size={21} strokeWidth={1.5} aria-hidden="true" /></Link></h3>
+            <h3 id={`service-${offering.slug}`}>{offering.title}<ArrowUpRight size={21} strokeWidth={1.5} aria-hidden="true" /></h3>
             <p>{offering.description}</p>
             <ul className="industry-input-tags" aria-label="연결할 수 있는 자료">{offering.inputs.map(input => <li key={input}>{input}</li>)}</ul>
-            <div className="industry-card-bottom"><span>첫 상담 <strong>0원</strong></span><Link href={`/services/${offering.slug}`}>자세히 보기<ArrowRight size={16} aria-hidden="true" /></Link></div>
+            <div className="industry-card-bottom"><span>첫 상담 <strong>0원</strong></span><span className="industry-card-action">자세히 보기<ArrowRight size={16} aria-hidden="true" /></span></div>
+            </Link>
           </article>)}
         </div>
         <p className="industry-examples-note">소개된 업무는 적용 가능한 구성 예시입니다. 실제 구현 범위는 사용하는 도구와 자료를 확인한 뒤 정합니다.</p>
