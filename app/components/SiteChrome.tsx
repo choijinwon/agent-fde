@@ -16,6 +16,7 @@ const navigation = [
 const aiServices = [
   { label: "AI 개발 도구", brand: "OSCODE", href: "https://oscode.workauto.co.kr/" },
   { label: "책 추천", brand: "에이전트북", href: "https://book.workauto.co.kr/" },
+  { label: "의류 검색", brand: "FIND / WEAR", href: "https://shop.workauto.co.kr/" },
 ];
 
 function AIServiceLinks({ onSelect }: { onSelect: () => void }) {
