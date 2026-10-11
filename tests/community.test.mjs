@@ -12,8 +12,9 @@ const owner = { id: "owner-id", email: "owner@example.test", name: "운영 질�
 const admin = { ...owner, id: "admin-id", appMetadata: { roles: ["admin"] } };
 const input = () => ({ kind: "question", industry: "academy", title: "수납 대조를 자동화하고 싶어요", body: "엑셀에 있는 학원 수납 내역과 은행 입금을 자동으로 비교할 수 있나요?", consent: true, website: "" });
 
-function harness(initialUser = owner) {
+function harness(initialUser = owner, deploy = { context: "production", id: "production-deploy" }) {
   const records = new Map();
+  const storeNames = [];
   let version = 0;
   let identity = initialUser;
   const clone = value => value === undefined ? undefined : structuredClone(value);
@@ -33,14 +34,61 @@ function harness(initialUser = owner) {
   // Exercise the real backend source with only its external platform boundaries replaced.
   const load = name => {
     if (name === "server-only") return {};
-    if (name === "@netlify/blobs") return { getStore: () => store };
+    if (name === "@netlify/blobs") return { getStore: options => { storeNames.push(options.name); return store; } };
+    if (name === "@netlify/functions") return { getContext: () => {
+      if (deploy === null) throw new Error("No Netlify request context");
+      return { deploy };
+    } };
     if (name === "@netlify/identity") return { getUser: async () => clone(identity) };
     if (name === "./community-rules") return require("../lib/community-rules.ts");
     return require(name);
   };
   new Function("require", "module", "exports", compiled)(load, loadedModule, loadedModule.exports);
-  return { api: loadedModule.exports, store, records, setUser: user => { identity = user; } };
+  return { api: loadedModule.exports, store, records, storeNames, setUser: user => { identity = user; } };
 }
+
+test("trusted deployment context isolates previews and CLI branch deploys from production without build environment variables", async () => {
+  const before = { CONTEXT: process.env.CONTEXT, BRANCH: process.env.BRANCH };
+  try {
+    // These variables may be absent in the deployed Next.js function.
+    delete process.env.CONTEXT;
+    delete process.env.BRANCH;
+    const production = harness(owner, { context: "production", id: "production-1" });
+    await production.api.listPublicPosts();
+    assert.deepEqual(production.storeNames, ["workauto-community"]);
+    const stores = new Set();
+    for (const context of ["deploy-preview", "branch-deploy", "dev"]) {
+      for (const id of ["deploy-1", "deploy-2"]) {
+        const preview = harness(owner, { context, id });
+        await preview.api.createCommunityPost(input());
+        await preview.api.listPublicPosts();
+        assert.equal(preview.storeNames[0], preview.storeNames[1]);
+        assert.match(preview.storeNames[0], /^workauto-community-[a-f0-9]{16}$/);
+        stores.add(preview.storeNames[0]);
+      }
+    }
+    assert.equal(stores.size, 6);
+    // A stale build variable cannot override trusted runtime deployment metadata.
+    process.env.CONTEXT = "production";
+    const preview = harness(owner, { context: "branch-deploy", id: "cli-preview" });
+    await preview.api.listPublicPosts();
+    assert.notEqual(preview.storeNames[0], "workauto-community");
+  } finally {
+    for (const [name, value] of Object.entries(before)) {
+      if (value === undefined) delete process.env[name]; else process.env[name] = value;
+    }
+  }
+});
+
+test("missing or malformed deployment metadata never opens a store, and writes fail closed", async () => {
+  for (const deploy of [null, {}, { context: "production" }, { context: "production", id: "" }, { context: "unknown", id: "deploy-1" }]) {
+    const { api, storeNames } = harness(owner, deploy);
+    assert.deepEqual(await api.listPublicPosts(), { posts: [], available: false, nextCursor: null });
+    assert.deepEqual(await api.listPublicPostSitemapEntries(), []);
+    await assert.rejects(api.createCommunityPost(input()), error => error.status === 503 && error.code === "unavailable");
+    assert.deepEqual(storeNames, []);
+  }
+});
 
 test("post validation discards forged ownership/status and rejects malformed, oversized or nonconsenting input", () => {
   const clean = validateCommunityPost({ ...input(), authorId: "victim", status: "published", email: "private@example.test", isAdmin: true });

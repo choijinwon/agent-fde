@@ -1,6 +1,7 @@
 import "server-only";
 import { createHash, randomUUID } from "node:crypto";
 import { getStore, type Store } from "@netlify/blobs";
+import { getContext } from "@netlify/functions";
 import { getUser } from "@netlify/identity";
 import type { CommunityComment, CommunityPost, CommunityPostDetail, CommunityPostList, CommunityReport, CommunityUser } from "./community-types";
 import { advanceRateWindow, assertCommunityAdmin, assertPostOwner, communityId, CommunityError, requireCommunityUser, validateCommunityComment, validateCommunityPost, validateCommunityReport, validateModeration, verifiedCommunityUser, type CommunityRateWindow } from "./community-rules";
@@ -9,13 +10,20 @@ const PAGE_SIZE = 20;
 const MAX_SCAN = 2000;
 
 function openStore(): Store | null {
+  let deploy;
   try {
-    // Preview submissions must never become production community content.
-    const context = process.env.CONTEXT;
-    const suffix = context && context !== "production" ? `-${createHash("sha256").update(process.env.BRANCH || context).digest("hex").slice(0, 12)}` : "";
+    // CONTEXT/BRANCH are build variables, not reliable request-time metadata.
+    // Only Netlify's request context may select a deployed community store.
+    deploy = getContext().deploy;
+  } catch {
+    return null;
+  }
+  if (!deploy || !["production", "deploy-preview", "branch-deploy", "dev"].includes(deploy.context) || typeof deploy.id !== "string" || !deploy.id.trim()) return null;
+  const suffix = deploy.context === "production" ? "" : `-${createHash("sha256").update(`${deploy.context}:${deploy.id}`).digest("hex").slice(0, 16)}`;
+  try {
     return getStore({ name: `workauto-community${suffix}`, consistency: "strong" });
   } catch (error) {
-    if (error instanceof Error && error.name === "MissingBlobsEnvironmentError" && !process.env.NETLIFY) return null;
+    if (error instanceof Error && error.name === "MissingBlobsEnvironmentError") return null;
     throw error;
   }
 }

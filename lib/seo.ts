@@ -3,6 +3,8 @@ import { BRAND_NAME, BRAND_ENGLISH_NAME, BRAND_TAGLINE } from "./brand";
 
 // Keep canonical URLs stable across local, preview, and production builds.
 export const SITE_URL = "https://workauto.co.kr";
+// Editorial revision date, not a build timestamp. Update only when public content changes.
+export const CONTENT_UPDATED_AT = "2026-10-11";
 
 export function siteMetadata({ title, description, path }: { title: string; description: string; path: string }): Metadata {
   const fullTitle = title.includes(BRAND_NAME) ? title : `${title} | ${BRAND_NAME}`;
@@ -21,6 +23,39 @@ export function siteMetadata({ title, description, path }: { title: string; desc
 
 export function safeJsonLd(value: unknown) { return JSON.stringify(value).replace(/</g, "\\u003c"); }
 
+export function webPageJsonLd({ title, description, path }: { title: string; description: string; path: string }) {
+  const url = `${SITE_URL}${path}`;
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": `${url}#webpage`,
+    url, name: title, description, inLanguage: "ko-KR",
+    isPartOf: { "@id": `${SITE_URL}/#website` },
+    about: { "@id": `${SITE_URL}/#brand` },
+    dateModified: CONTENT_UPDATED_AT,
+  };
+}
+
+export function catalogJsonLd(items: readonly { slug: string; service: string }[]) {
+  const url = `${SITE_URL}/services`;
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        ...webPageJsonLd({ title: "업종별 업무 자동화", description: "학원, 병원, 제조 ERP, 엑셀·회계 등 업종별 자동화 업무와 적용 방법을 살펴보세요.", path: "/services" }),
+        "@type": "CollectionPage",
+        mainEntity: { "@id": `${url}#services` },
+      },
+      {
+        "@type": "ItemList", "@id": `${url}#services`, numberOfItems: items.length,
+        itemListElement: items.map((item, index) => ({
+          "@type": "ListItem", position: index + 1, name: item.service, url: `${url}/${item.slug}`,
+        })),
+      },
+    ],
+  };
+}
+
 export const websiteJsonLd = {
   "@context": "https://schema.org",
   "@graph": [
@@ -35,8 +70,13 @@ export function serviceJsonLd(item: { slug: string; title: string; service: stri
   return {
     "@context": "https://schema.org",
     "@graph": [
+      {
+        ...webPageJsonLd({ title: item.service, description: item.description, path: `/services/${item.slug}` }),
+        mainEntity: { "@id": `${url}#service` },
+        breadcrumb: { "@id": `${url}#breadcrumb` },
+      },
       { "@type": "Service", "@id": `${url}#service`, name: item.service, serviceType: item.service, description: item.description, url, brand: { "@id": `${SITE_URL}/#brand` }, provider: { "@id": `${SITE_URL}/#person` } },
-      { "@type": "BreadcrumbList", itemListElement: [
+      { "@type": "BreadcrumbList", "@id": `${url}#breadcrumb`, itemListElement: [
         { "@type": "ListItem", position: 1, name: "홈", item: `${SITE_URL}/` },
         { "@type": "ListItem", position: 2, name: "업종별 업무 자동화", item: `${SITE_URL}/services` },
         { "@type": "ListItem", position: 3, name: item.title, item: url },

@@ -10,7 +10,7 @@ export type ServiceOffering = {
   reviewNote: string;
 };
 
-export const SERVICE_CATALOG: readonly ServiceOffering[] = [
+export const SERVICE_CATALOG = [
   {
     slug: "academy",
     service: "학원 운영 자동화",
@@ -110,7 +110,9 @@ export const SERVICE_CATALOG: readonly ServiceOffering[] = [
     inputs: ["현재 작업 방식", "사용하는 파일·도구", "원하는 결과물"],
     reviewNote: "업종 이름보다 실제 업무 흐름을 먼저 살펴봅니다. 연동 환경과 예외 상황을 확인한 뒤 가능한 범위, 진행 순서와 개발 비용을 안내합니다.",
   },
-];
+] as const satisfies readonly ServiceOffering[];
+
+export type ServiceSlug = (typeof SERVICE_CATALOG)[number]["slug"];
 
 export const CONSULTATION_SERVICES = [
   ...SERVICE_CATALOG.map(({ service }) => service),

@@ -1,9 +1,10 @@
 import { BRAND_NAME } from "@/lib/brand";
 import Link from "next/link";
 import { getNetlifyFormsUrl } from "@/lib/netlify-form";
+import { siteMetadata } from "@/lib/seo";
 import "./admin.css";
 
-export const metadata = { title: `상담 문의 관리 | ${BRAND_NAME}`, robots: { index: false, follow: false } };
+export const metadata = { ...siteMetadata({ title: `상담 문의 관리 | ${BRAND_NAME}`, description: "워크오토 운영자를 위한 상담 문의 관리 안내입니다.", path: "/admin" }), robots: { index: false, follow: false } };
 
 export default function AdminPage() {
   const dashboardUrl = getNetlifyFormsUrl(process.env.NETLIFY_SITE_SLUG, process.env.URL);
