@@ -8,11 +8,18 @@ import { advanceRateWindow, assertCommunityAdmin, assertCommunityOrigin, assertP
 const require = createRequire(import.meta.url);
 const source = await readFile(new URL("../lib/community-server.ts", import.meta.url), "utf8");
 const compiled = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
+const configSource = await readFile(new URL("../next.config.ts", import.meta.url), "utf8");
+const configCompiled = ts.transpileModule(configSource, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
+function buildStore(env) {
+  const configModule = { exports: {} };
+  new Function("require", "module", "exports", "process", configCompiled)(require, configModule, configModule.exports, { env, cwd: () => process.cwd() });
+  return configModule.exports.default.env.WORKAUTO_COMMUNITY_STORE;
+}
 const owner = { id: "owner-id", email: "owner@example.test", name: "운영 질문자", confirmedAt: "2026-10-11T00:00:00.000Z", appMetadata: { roles: [] } };
 const admin = { ...owner, id: "admin-id", appMetadata: { roles: ["admin"] } };
 const input = () => ({ kind: "question", industry: "academy", title: "수납 대조를 자동화하고 싶어요", body: "엑셀에 있는 학원 수납 내역과 은행 입금을 자동으로 비교할 수 있나요?", consent: true, website: "" });
 
-function harness(initialUser = owner, deploy = { context: "production", id: "production-deploy" }) {
+function harness(initialUser = owner, storeName = buildStore({ CONTEXT: "production" }), runtimeEnv = {}) {
   const records = new Map();
   const storeNames = [];
   let version = 0;
@@ -35,54 +42,45 @@ function harness(initialUser = owner, deploy = { context: "production", id: "pro
   const load = name => {
     if (name === "server-only") return {};
     if (name === "@netlify/blobs") return { getStore: options => { storeNames.push(options.name); return store; } };
-    if (name === "@netlify/functions") return { getContext: () => {
-      if (deploy === null) throw new Error("No Netlify request context");
-      return { deploy };
-    } };
     if (name === "@netlify/identity") return { getUser: async () => clone(identity) };
+    if (name === "./community-auth") return { getVerifiedCommunityIdentity: async () => clone(identity) };
     if (name === "./community-rules") return require("../lib/community-rules.ts");
     return require(name);
   };
-  new Function("require", "module", "exports", compiled)(load, loadedModule, loadedModule.exports);
+  new Function("require", "module", "exports", "process", compiled)(load, loadedModule, loadedModule.exports, { env: { ...runtimeEnv, WORKAUTO_COMMUNITY_STORE: storeName } });
   return { api: loadedModule.exports, store, records, storeNames, setUser: user => { identity = user; } };
 }
 
-test("trusted deployment context isolates previews and CLI branch deploys from production without build environment variables", async () => {
-  const before = { CONTEXT: process.env.CONTEXT, BRANCH: process.env.BRANCH };
-  try {
-    // These variables may be absent in the deployed Next.js function.
-    delete process.env.CONTEXT;
-    delete process.env.BRANCH;
-    const production = harness(owner, { context: "production", id: "production-1" });
-    await production.api.listPublicPosts();
-    assert.deepEqual(production.storeNames, ["workauto-community"]);
-    const stores = new Set();
-    for (const context of ["deploy-preview", "branch-deploy", "dev"]) {
-      for (const id of ["deploy-1", "deploy-2"]) {
-        const preview = harness(owner, { context, id });
-        await preview.api.createCommunityPost(input());
-        await preview.api.listPublicPosts();
-        assert.equal(preview.storeNames[0], preview.storeNames[1]);
-        assert.match(preview.storeNames[0], /^workauto-community-[a-f0-9]{16}$/);
-        stores.add(preview.storeNames[0]);
-      }
-    }
-    assert.equal(stores.size, 6);
-    // A stale build variable cannot override trusted runtime deployment metadata.
-    process.env.CONTEXT = "production";
-    const preview = harness(owner, { context: "branch-deploy", id: "cli-preview" });
-    await preview.api.listPublicPosts();
-    assert.notEqual(preview.storeNames[0], "workauto-community");
-  } finally {
-    for (const [name, value] of Object.entries(before)) {
-      if (value === undefined) delete process.env[name]; else process.env[name] = value;
+test("build-time context isolates previews and CLI branch deploys without depending on runtime build variables", async () => {
+  const production = harness(owner, buildStore({ CONTEXT: "production", DEPLOY_ID: "production-1" }));
+  await production.api.listPublicPosts();
+  assert.deepEqual(production.storeNames, ["workauto-community"]);
+  const stores = new Set();
+  for (const CONTEXT of ["deploy-preview", "branch-deploy", "dev"]) {
+    for (const DEPLOY_ID of ["deploy-1", "deploy-2"]) {
+      const preview = harness(owner, buildStore({ CONTEXT, DEPLOY_ID }));
+      await preview.api.createCommunityPost(input());
+      await preview.api.listPublicPosts();
+      assert.equal(preview.storeNames[0], preview.storeNames[1]);
+      assert.match(preview.storeNames[0], /^workauto-community-[a-f0-9]{16}$/);
+      stores.add(preview.storeNames[0]);
     }
   }
+  assert.equal(stores.size, 6);
+  // CLI builds can lack DEPLOY_ID, BRANCH, and COMMIT_REF; they still get an
+  // isolated preview store. Stale runtime CONTEXT cannot change the selection.
+  const cliStore = buildStore({ CONTEXT: "branch-deploy" });
+  const cli = harness(owner, cliStore, { CONTEXT: "production" });
+  await cli.api.listPublicPosts();
+  assert.match(cli.storeNames[0], /^workauto-community-[a-f0-9]{16}$/);
+  assert.equal(buildStore({ CONTEXT: "branch-deploy" }), cliStore);
+  assert.notEqual(buildStore({ CONTEXT: "branch-deploy", BRANCH: "another-preview" }), cliStore);
 });
 
 test("missing or malformed deployment metadata never opens a store, and writes fail closed", async () => {
-  for (const deploy of [null, {}, { context: "production" }, { context: "production", id: "" }, { context: "unknown", id: "deploy-1" }]) {
-    const { api, storeNames } = harness(owner, deploy);
+  for (const buildEnv of [{}, { CONTEXT: "" }, { CONTEXT: "unknown" }, { WORKAUTO_COMMUNITY_STORE: "workauto-community" }]) assert.equal(buildStore(buildEnv), "");
+  for (const storeName of ["", null, "workauto-community-", "another-store", "workauto-community-../../private"]) {
+    const { api, storeNames } = harness(owner, storeName, { CONTEXT: "production" });
     assert.deepEqual(await api.listPublicPosts(), { posts: [], available: false, nextCursor: null });
     assert.deepEqual(await api.listPublicPostSitemapEntries(), []);
     await assert.rejects(api.createCommunityPost(input()), error => error.status === 503 && error.code === "unavailable");

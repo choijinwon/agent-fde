@@ -1,8 +1,7 @@
 import "server-only";
 import { createHash, randomUUID } from "node:crypto";
 import { getStore, type Store } from "@netlify/blobs";
-import { getContext } from "@netlify/functions";
-import { getUser } from "@netlify/identity";
+import { getVerifiedCommunityIdentity } from "./community-auth";
 import type { CommunityComment, CommunityPost, CommunityPostDetail, CommunityPostList, CommunityReport, CommunityUser } from "./community-types";
 import { advanceRateWindow, assertCommunityAdmin, assertPostOwner, communityId, CommunityError, requireCommunityUser, validateCommunityComment, validateCommunityPost, validateCommunityReport, validateModeration, verifiedCommunityUser, type CommunityRateWindow } from "./community-rules";
 
@@ -10,18 +9,12 @@ const PAGE_SIZE = 20;
 const MAX_SCAN = 2000;
 
 function openStore(): Store | null {
-  let deploy;
+  // Next replaces this exact reference with the nonsecret build-time value
+  // from next.config.ts; absent runtime CONTEXT can never select production.
+  const name = process.env.WORKAUTO_COMMUNITY_STORE;
+  if (!name || !/^workauto-community(?:-[a-f0-9]{16})?$/.test(name)) return null;
   try {
-    // CONTEXT/BRANCH are build variables, not reliable request-time metadata.
-    // Only Netlify's request context may select a deployed community store.
-    deploy = getContext().deploy;
-  } catch {
-    return null;
-  }
-  if (!deploy || !["production", "deploy-preview", "branch-deploy", "dev"].includes(deploy.context) || typeof deploy.id !== "string" || !deploy.id.trim()) return null;
-  const suffix = deploy.context === "production" ? "" : `-${createHash("sha256").update(`${deploy.context}:${deploy.id}`).digest("hex").slice(0, 16)}`;
-  try {
-    return getStore({ name: `workauto-community${suffix}`, consistency: "strong" });
+    return getStore({ name, consistency: "strong" });
   } catch (error) {
     if (error instanceof Error && error.name === "MissingBlobsEnvironmentError") return null;
     throw error;
@@ -67,7 +60,7 @@ function afterCursor(post: CommunityPost, cursor: string): boolean {
 }
 
 export async function getCommunityUser(): Promise<CommunityUser | null> {
-  return verifiedCommunityUser(await getUser());
+  return verifiedCommunityUser(await getVerifiedCommunityIdentity());
 }
 
 export async function listPublicPosts(options: { kind?: string; industry?: string; cursor?: string; q?: string } = {}): Promise<CommunityPostList> {
