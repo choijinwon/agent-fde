@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowUpRight, ChevronRight, Check, GraduationCap, HeartPulse, Factory, Table2, ShoppingBag, Package, Store, BriefcaseBusiness, Workflow, MessageCircle, Plus } from "lucide-react";
+import { ArrowUpRight, ChevronRight, Check, GraduationCap, HeartPulse, Factory, Table2, ShoppingBag, Package, Store, BriefcaseBusiness, Workflow, MessageCircle } from "lucide-react";
 import { SERVICE_CATALOG } from "@/lib/service-catalog";
 import { siteMetadata } from "@/lib/seo";
 import { SiteHeader, SiteFooter } from "../components/SiteChrome";
@@ -34,7 +34,7 @@ export default function ServicesPage() {
         <div className="industry-section-top"><h2 id="industry-list-title">업종별 자동화. <span>지금 하는 일에서 시작합니다.</span></h2></div>
         <div className="industry-card-grid">
           {SERVICE_CATALOG.map((offering, index) => { const Icon = categoryIcons[index]; return <article className={`industry-card${index === 2 || index === 8 ? " industry-card-dark" : ""}`} key={offering.slug} id={`category-${offering.slug}`}>
-            <Link className="industry-card-link" href={`/services/${offering.slug}`} aria-labelledby={`service-${offering.slug}`}>
+            <Link className="industry-card-link" href={`/services/${offering.slug}`} aria-labelledby={`service-${offering.slug} service-detail-${offering.slug}`}>
               <p className="industry-card-label" id={`service-${offering.slug}`}>{offering.title}</p>
               <h3>{cardHeadlines[index].split("\n").map((line,i) => <span key={line}>{i > 0 && <br />}{line}</span>)}</h3>
               <div className="industry-card-visual" aria-hidden="true">
@@ -47,8 +47,13 @@ export default function ServicesPage() {
                 </div>
               </div>
               <p className="industry-card-description">{offering.description}</p>
-              <div className="industry-card-bottom"><span>첫 상담 <strong>0원</strong></span><span className="industry-card-action">자세히 보기<span><Plus size={20} aria-hidden="true" /></span></span></div>
+              <span className="industry-card-detail" id={`service-detail-${offering.slug}`}>자세히 보기<ChevronRight size={15} aria-hidden="true" /></span>
             </Link>
+            <div className="industry-card-bottom">
+              <span>첫 상담 <strong>0원</strong></span>
+              <Link className="button button-dark industry-card-apply" href={`/consultation?service=${offering.slug}`} aria-label={`${offering.title} 0원 상담 신청`}>0원 상담 신청<ArrowUpRight size={15} aria-hidden="true" /></Link>
+              <p className="industry-card-fee-note">개발 비용은 상담 후 별도 안내</p>
+            </div>
           </article>; })}
         </div>
         <p className="industry-examples-note">카드의 그래픽과 소개된 업무는 적용 가능한 구성 예시입니다. 실제 구현 범위와 개발 비용은 사용하는 도구와 자료를 확인한 뒤 정합니다.</p>
