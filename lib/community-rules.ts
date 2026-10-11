@@ -100,10 +100,15 @@ export function assertPostOwner(post: Pick<CommunityPost, "authorId">, user: Com
 export function assertCommunityOrigin(request: Request): void {
   const origin = request.headers.get("origin");
   const requestUrl = new URL(request.url);
+  // Netlify's Next handler reuses the hostname from its first request, so a
+  // warm instance may expose a deployment URL even for our custom domain.
+  // Permit only our fixed public origin plus its actual Host, never a supplied
+  // forwarded host. Keep this explicit allowlist aligned with SITE_URL.
+  const canonicalHostOrigin = origin === "https://workauto.co.kr" && request.headers.get("host") === "workauto.co.kr";
   let localDevelopmentOrigin = false;
   // Next's local development server canonicalizes Request.url to localhost even
   // when bound to 127.0.0.1. Accept only that literal loopback alias, using the
-  // actual Host header and matching scheme/port. Hosted requests stay exact-match.
+  // actual Host header and matching scheme/port.
   if (origin && process.env.NODE_ENV !== "production" && !process.env.NETLIFY) {
     try {
       const source = new URL(origin);
@@ -112,7 +117,7 @@ export function assertCommunityOrigin(request: Request): void {
         && source.protocol === requestUrl.protocol && source.port === requestUrl.port && source.host === request.headers.get("host");
     } catch { /* Invalid origins fail the strict check below. */ }
   }
-  if (!origin || origin !== requestUrl.origin && !localDevelopmentOrigin || request.headers.get("sec-fetch-site") === "cross-site") {
+  if (!origin || origin !== requestUrl.origin && !canonicalHostOrigin && !localDevelopmentOrigin || request.headers.get("sec-fetch-site") === "cross-site") {
     throw new CommunityError("허용되지 않은 요청입니다.", 403, "invalid_origin");
   }
 }

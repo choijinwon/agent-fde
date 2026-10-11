@@ -113,6 +113,30 @@ test("all cookie-authenticated mutations reject absent and cross-site Origin", (
   assert.doesNotThrow(() => assertCommunityOrigin(new Request(url, { headers: { origin: "https://workauto.co.kr" } })));
 });
 
+test("Netlify cached deployment hostname permits only the fixed canonical Origin and actual Host", () => {
+  for (const deploymentHost of ["agent-fde.netlify.app", "6acb520a96879eba642917bf--agent-fde.netlify.app"]) {
+    const request = headers => new Request(`https://${deploymentHost}/api/community/posts`, { headers });
+    assert.doesNotThrow(() => assertCommunityOrigin(request({ origin: "https://workauto.co.kr", host: "workauto.co.kr" })));
+    // Forwarded headers neither grant access nor override the validated pair.
+    assert.doesNotThrow(() => assertCommunityOrigin(request({ origin: "https://workauto.co.kr", host: "workauto.co.kr", "x-forwarded-host": "attacker.example" })));
+    for (const headers of [
+      { host: "workauto.co.kr" },
+      { origin: "null", host: "workauto.co.kr" },
+      { origin: "https://workauto.co.kr" },
+      { origin: "https://workauto.co.kr", host: deploymentHost },
+      { origin: "https://workauto.co.kr", host: "attacker.example", "x-forwarded-host": "workauto.co.kr" },
+      { origin: "https://workauto.co.kr", "x-forwarded-host": "workauto.co.kr", "x-forwarded-proto": "https" },
+      { origin: "https://workauto.co.kr", host: "workauto.co.kr.attacker.example" },
+      { origin: "http://workauto.co.kr", host: "workauto.co.kr" },
+      { origin: "https://workauto.co.kr:444", host: "workauto.co.kr" },
+      { origin: "https://workauto.co.kr/", host: "workauto.co.kr" },
+      { origin: "https://attacker.example", host: "attacker.example", "x-forwarded-host": "attacker.example" },
+      { origin: "https://workauto.co.kr.attacker.example", host: "workauto.co.kr" },
+      { origin: "https://workauto.co.kr", host: "workauto.co.kr", "sec-fetch-site": "cross-site" },
+    ]) assert.throws(() => assertCommunityOrigin(request(headers)), error => error.status === 403 && error.code === "invalid_origin");
+  }
+});
+
 test("Next localhost normalization permits only matching loopback Host during local development", () => {
   const previousMode = process.env.NODE_ENV;
   const previousNetlify = process.env.NETLIFY;
