@@ -1,0 +1,13 @@
+import Link from "next/link";
+import { SiteFooter, SiteHeader } from "@/app/components/SiteChrome";
+import { siteMetadata } from "@/lib/seo";
+import "./guide.css";
+
+export const metadata = siteMetadata({ title: "커뮤니티 이용·개인정보 안내", description: "워크오토 커뮤니티에서 질문과 활용 사례를 나누는 방법, 공개 범위와 개인정보 이용 안내입니다.", path: "/community/guide" });
+export default function CommunityGuide() {
+  return <><SiteHeader /><main id="main" className="community-guide"><Link href="/community" className="text-link">← 커뮤니티로</Link><p className="guide-eyebrow">WORKAUTO COMMUNITY</p><h1>서로에게 도움이 되는<br />이야기를 나눠요.</h1><p className="guide-lead">업무의 작은 불편함부터 직접 해본 자동화 경험까지.<br />안심하고 질문하고 답할 수 있는 공간을 함께 만듭니다.</p>
+    <section><h2>커뮤니티 이용 안내</h2><ol><li><strong>질문에는 지금 하는 일을 구체적으로 적어 주세요.</strong><p>사용하는 도구, 반복되는 과정, 원하는 결과를 알려 주시면 답변하기 좋습니다.</p></li><li><strong>활용 사례에는 실제 경험을 나눠 주세요.</strong><p>직접 해본 방법과 한계도 함께 적어 주세요. 가상의 구성은 ‘예시’라고 명확히 표시해 주세요.</p></li><li><strong>개인정보와 회사의 비밀 자료는 올리지 마세요.</strong><p>환자·학생·고객의 이름, 연락처, 계좌, 비밀번호와 내부 자료 대신 식별 정보를 지운 예시를 사용해 주세요. 게시글과 댓글은 누구나 읽을 수 있고 검색에 노출될 수 있습니다.</p></li><li><strong>광고·도배·비방은 제한합니다.</strong><p>관련 없는 홍보, 사칭, 타인의 권리를 침해하는 내용은 신고 대상이며 운영자가 숨길 수 있습니다. 궁금한 점이 있다면 운영자에게 문의해 주세요.</p></li></ol><p>커뮤니티 답변은 일반적인 경험 공유입니다. 실제 개발 범위와 비용은 <Link href="/consultation">무료 상담</Link>에서 따로 확인합니다.</p></section>
+    <section id="privacy"><h2>회원 개인정보 수집·이용 안내</h2><dl><dt>운영자와 연락처</dt><dd>워크오토 운영자 최진원 · <a href="mailto:abyys1004@naver.com">abyys1004@naver.com</a></dd><dt>가입 시 필요한 정보</dt><dd>이메일, 닉네임, 비밀번호를 입력합니다. 회원 인증과 비밀번호 관리는 Netlify Identity에서 처리하며 워크오토 게시판 저장소에 비밀번호를 보관하지 않습니다.</dd><dt>이용 목적</dt><dd>가입·이메일 인증·로그인·계정 복구, 작성자 확인과 내 글 조회, 신고 및 운영 규칙 위반 처리에 사용합니다.</dd><dt>공개 범위</dt><dd>닉네임, 작성한 글·댓글, 작성일은 공개됩니다. 이메일과 계정 인증 정보, 신고 내용은 공개하지 않습니다.</dd><dt>서비스 처리</dt><dd>회원 인증과 게시글 저장에는 Netlify 서비스를 이용합니다. 서비스 운영 과정에서 기술 정보가 처리될 수 있습니다. <a href="https://www.netlify.com/privacy/" target="_blank" rel="noopener noreferrer">Netlify 개인정보 안내</a>에서 해당 서비스의 처리 방식을 확인할 수 있습니다.</dd><dt>보관과 삭제 요청</dt><dd>계정 정보는 회원 서비스 제공을 위해 보관합니다. 게시글은 본인 계정에서 삭제할 수 있습니다. 삭제하면 제목과 본문이 제거되어 복구할 수 없으며, 해당 글의 댓글도 공개되지 않습니다. 작성자 식별 정보·작성일·삭제 상태와 댓글 기록은 저장소에 남을 수 있습니다. 회원 탈퇴나 계정·게시글·댓글의 완전 삭제는 위 이메일로 요청해 주세요. 운영자가 본인 확인 후 처리합니다.</dd><dt>동의하지 않는 경우</dt><dd>회원가입을 진행할 수 없지만 공개 글 읽기와 비회원 무료 상담은 이용할 수 있습니다. 커뮤니티 가입 정보로 광고 메일을 발송하지 않습니다.</dd></dl><p className="guide-date">안내 적용일: 2026년 10월 11일</p></section>
+    <div className="guide-actions"><Link href="/community" className="button button-dark">커뮤니티 둘러보기</Link><Link href="/account/login?mode=signup" className="text-link">회원가입 →</Link></div>
+  </main><SiteFooter /></>;
+}

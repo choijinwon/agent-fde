@@ -4,12 +4,13 @@ import { BRAND_NAME, BRAND_ENGLISH_NAME, BRAND_TAGLINE } from "@/lib/brand";
 import { useEffect, useId, useRef, useState } from "react";
 import { ArrowUpRight, Menu, X } from "lucide-react";
 import "./site-chrome.css";
+import { useCommunityAuth } from "./CommunityAuth";
 
 const contactEmail = "abyys1004@naver.com";
 const navigation = [
   { label: "소개·경력", href: "/#about" },
   { label: "업종별 상담", href: "/services" },
-  { label: "진행 방식", href: "/#process" },
+  { label: "커뮤니티", href: "/community" },
 ];
 
 function SiteBrand({ showIcon = false }: { showIcon?: boolean }) {
@@ -26,6 +27,7 @@ function SiteBrand({ showIcon = false }: { showIcon?: boolean }) {
 }
 
 export function SiteHeader() {
+  const { user } = useCommunityAuth();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuId = useId();
   const headerRef = useRef<HTMLElement>(null);
@@ -68,6 +70,7 @@ export function SiteHeader() {
           <SiteBrand showIcon />
           <nav className="desktop-nav" aria-label="주 메뉴">
             {navigation.map(item => <a href={item.href} key={item.href}>{item.label}</a>)}
+            <a href={user ? "/account" : "/account/login"}>{user ? "내 활동" : "로그인"}</a>
           </nav>
           <a href="/consultation" className="header-cta">
             무료 상담 신청 <ArrowUpRight size={16} aria-hidden="true" />
@@ -90,6 +93,7 @@ export function SiteHeader() {
               {item.label}<ArrowUpRight size={18} aria-hidden="true" />
             </a>
           ))}
+          <a href={user ? "/account" : "/account/login"} onClick={() => setMenuOpen(false)}>{user ? "내 활동" : "로그인·회원가입"}<ArrowUpRight size={18} aria-hidden="true" /></a>
           <a className="chrome-mobile-consultation" href="/consultation" onClick={() => setMenuOpen(false)}>
             무료 상담 신청 <ArrowUpRight size={18} aria-hidden="true" />
           </a>
@@ -110,6 +114,7 @@ export function SiteFooter() {
       </div>
       <div className="footer-right">
         <div className="footer-links">
+          <a href="/community/guide">커뮤니티 이용 안내</a>
           <a href="/admin">문의 관리</a>
           <a href="/#home">처음으로 <ArrowUpRight size={15} aria-hidden="true" /></a>
         </div>

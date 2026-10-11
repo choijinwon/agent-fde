@@ -46,6 +46,14 @@ h2 { font-size: clamp(36px,3.6vw,48px); line-height: 1.23; font-weight: 750; let
 .text-link { display: inline-flex; align-items: center; gap: 9px; min-height: 44px; color: #0066cc; font-size: 14px; font-weight: 500; }
 .text-link:hover { text-decoration: underline; text-underline-offset: 4px; }
 
+.auth-callback { min-height: 100vh; display: grid; place-content: center; padding: 32px; gap: 20px; }
+.auth-callback h1 { font-size: 28px; margin-bottom: 24px; }
+.auth-callback label { display: grid; gap: 8px; }
+.auth-callback input { background: white; border: 1px solid #d2d2d7; border-radius: 12px; padding: 12px; }
+.auth-callback button { background: #0071e3; color: white; padding: 12px 24px; border-radius: 999px; margin-top: 20px; }
+.auth-callback-error { position: fixed; bottom: 20px; left: 20px; right: 20px; z-index: 100; max-width: 700px; padding: 20px; border-radius: 16px; background: #fff3f2; box-shadow: 0 6px 30px #0002; font-size: 14px; }
+.auth-callback-error a { color: #0066cc; text-decoration: underline; }
+
 /* Shared chrome is refined by SiteChrome's own stylesheet. */
 .site-header { height: 64px; position: sticky; top: 0; z-index: 50; background: #fafafccc; border-bottom: 1px solid #0000000a; backdrop-filter: blur(20px); }
 .header-inner { height: 100%; display: flex; justify-content: space-between; align-items: center; max-width: 1328px; margin: auto; padding: 0 48px; }

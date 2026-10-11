@@ -65,7 +65,7 @@
   display: flex;
   align-items: center;
   margin: 0;
-  gap: 34px;
+  gap: 24px;
   color: #424245;
   font-size: 12px;
   font-weight: 400;
@@ -164,7 +164,7 @@
   margin: 0;
   gap: 16px;
 }
-.site-chrome-footer .footer-links { display: flex; align-items: center; gap: 24px; }
+.site-chrome-footer .footer-links { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; }
 .site-chrome-footer .footer-links > a,
 .site-chrome-footer .footer-links > a:first-child {
   display: inline-flex;

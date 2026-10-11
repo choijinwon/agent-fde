@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { BRAND_NAME } from "@/lib/brand";
 import { SITE_URL, siteMetadata, safeJsonLd, websiteJsonLd } from "@/lib/seo";
 import "./globals.css";
+import { CommunityAuthProvider } from "./components/CommunityAuth";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -11,5 +12,5 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="ko" data-scroll-behavior="smooth"><body className="antialiased"><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(websiteJsonLd) }}/>{children}</body></html>;
+  return <html lang="ko" data-scroll-behavior="smooth"><body className="antialiased"><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(websiteJsonLd) }}/><CommunityAuthProvider>{children}</CommunityAuthProvider></body></html>;
 }
