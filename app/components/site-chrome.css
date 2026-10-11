@@ -85,6 +85,65 @@
 .site-chrome-header .desktop-nav a::after { display: none; }
 .site-chrome-header .desktop-nav a:hover { color: #0071e3; }
 
+.site-chrome-header .chrome-ai-disclosure { position: relative; }
+.site-chrome-header .chrome-ai-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 44px;
+  padding: 10px 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.site-chrome-header .chrome-ai-toggle:hover,
+.site-chrome-header .chrome-ai-toggle[aria-expanded="true"] { color: #0071e3; }
+.site-chrome-header .chrome-ai-toggle svg { transition: transform .18s ease; }
+.site-chrome-header .chrome-ai-toggle[aria-expanded="true"] svg { transform: rotate(180deg); }
+.site-chrome-header .chrome-ai-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: -20px;
+  width: 232px;
+  padding: 8px;
+  border: 1px solid #e5e5e7;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 14px 36px rgba(0, 0, 0, .1);
+}
+.site-chrome-header .chrome-ai-panel[hidden] { display: none; }
+.site-chrome-header .chrome-ai-panel a {
+  justify-content: space-between;
+  gap: 24px;
+  min-height: 72px;
+  padding: 14px 16px;
+  border-radius: 12px;
+}
+.site-chrome-header .chrome-ai-panel a:hover { background: #f5f5f7; }
+.site-chrome-header .ai-service-label {
+  display: block;
+  color: #1d1d1f;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+.site-chrome-header .ai-service-brand {
+  display: block;
+  margin-top: 4px;
+  color: #6e6e73;
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: 0;
+}
+.site-chrome-header .chrome-ai-panel a > svg { flex-shrink: 0; color: #86868b; }
+.site-chrome-header .chrome-ai-panel a:hover .ai-service-label,
+.site-chrome-header .chrome-ai-panel a:hover > svg { color: #0071e3; }
+
 .site-chrome-header .header-cta {
   display: inline-flex;
   align-items: center;
@@ -255,6 +314,32 @@
   .site-chrome-header .chrome-mobile-nav > a > svg { width: 17px; height: 17px; color: #86868b; }
   .site-chrome-header .chrome-mobile-nav > .chrome-mobile-consultation,
   .site-chrome-header .chrome-mobile-nav > .chrome-mobile-consultation > svg { color: #0071e3; }
+  .site-chrome-header .chrome-mobile-services {
+    padding: 12px 0;
+    margin: 4px 0;
+    border-top: 1px solid #e5e5e7;
+    border-bottom: 1px solid #e5e5e7;
+  }
+  .site-chrome-header .chrome-mobile-services > p {
+    margin: 0 0 4px;
+    color: #6e6e73;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.5;
+    letter-spacing: -.1px;
+  }
+  .site-chrome-header .chrome-mobile-services > a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 64px;
+    padding: 10px 0;
+  }
+  .site-chrome-header .chrome-mobile-services .ai-service-label { font-size: 19px; letter-spacing: -.4px; }
+  .site-chrome-header .chrome-mobile-services .ai-service-brand { font-size: 11px; }
+  .site-chrome-header .chrome-mobile-services a > svg { flex-shrink: 0; color: #86868b; }
+  .site-chrome-header .chrome-mobile-services a:hover .ai-service-label,
+  .site-chrome-header .chrome-mobile-services a:hover > svg { color: #0071e3; }
   .site-chrome-header .chrome-mobile-note {
     margin: 16px 0 0;
     padding-top: 18px;

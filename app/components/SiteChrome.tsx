@@ -3,18 +3,92 @@
 import Link from "next/link";
 import { BRAND_NAME, BRAND_ENGLISH_NAME, BRAND_TAGLINE } from "@/lib/brand";
 import { useEffect, useId, useRef, useState } from "react";
-import { ArrowUpRight, ExternalLink, Menu, X } from "lucide-react";
+import { ArrowUpRight, ChevronDown, ExternalLink, Menu, X } from "lucide-react";
 import "./site-chrome.css";
 import { useCommunityAuth } from "./CommunityAuth";
 
 const contactEmail = "abyys1004@naver.com";
-const navigation: { label: string; href: string; external?: boolean }[] = [
+const navigation = [
   { label: "무료 진단", href: "/diagnosis" },
   { label: "업종별 상담", href: "/services" },
   { label: "개발 사례", href: "/cases" },
-  { label: "AI 개발 도구", href: "https://oscode.workauto.co.kr/", external: true },
-  { label: "커뮤니티", href: "/community" },
 ];
+const aiServices = [
+  { label: "AI 개발 도구", brand: "OSCODE", href: "https://oscode.workauto.co.kr/" },
+  { label: "책 추천", brand: "에이전트북", href: "https://book.workauto.co.kr/" },
+];
+
+function AIServiceLinks({ onSelect }: { onSelect: () => void }) {
+  return aiServices.map(service => (
+    <a
+      href={service.href}
+      key={service.href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={`${service.label} · ${service.brand} (새 탭에서 열림)`}
+      title={`${service.brand} · 새 탭에서 열림`}
+      onClick={onSelect}
+    >
+      <span><span className="ai-service-label">{service.label}</span><span className="ai-service-brand">{service.brand}</span></span>
+      <ExternalLink size={15} aria-hidden="true" />
+    </a>
+  ));
+}
+
+function DesktopAIServices() {
+  const [open, setOpen] = useState(false);
+  const panelId = useId();
+  const groupRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    function onPointerDown(event: PointerEvent) {
+      if (event.target instanceof Node && !groupRef.current?.contains(event.target)) setOpen(false);
+    }
+    const desktop = window.matchMedia("(min-width: 981px)");
+    function onViewportChange() {
+      if (!desktop.matches) setOpen(false);
+    }
+    document.addEventListener("pointerdown", onPointerDown);
+    desktop.addEventListener("change", onViewportChange);
+    return () => {
+      document.removeEventListener("pointerdown", onPointerDown);
+      desktop.removeEventListener("change", onViewportChange);
+    };
+  }, [open]);
+
+  return (
+    <div
+      className="chrome-ai-disclosure"
+      ref={groupRef}
+      onBlur={event => {
+        if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false);
+      }}
+      onKeyDown={event => {
+        if (event.key === "Escape" && open) {
+          event.preventDefault();
+          setOpen(false);
+          buttonRef.current?.focus();
+        }
+      }}
+    >
+      <button
+        type="button"
+        className="chrome-ai-toggle"
+        ref={buttonRef}
+        aria-expanded={open}
+        aria-controls={panelId}
+        onClick={() => setOpen(value => !value)}
+      >
+        AI 서비스 <ChevronDown size={13} aria-hidden="true" />
+      </button>
+      <div id={panelId} className="chrome-ai-panel" hidden={!open}>
+        <AIServiceLinks onSelect={() => setOpen(false)} />
+      </div>
+    </div>
+  );
+}
 
 function SiteBrand({ showIcon = false }: { showIcon?: boolean }) {
   return (
@@ -33,6 +107,7 @@ export function SiteHeader() {
   const { user } = useCommunityAuth();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuId = useId();
+  const mobileServicesId = useId();
   const headerRef = useRef<HTMLElement>(null);
   const toggleRef = useRef<HTMLButtonElement>(null);
 
@@ -50,6 +125,11 @@ export function SiteHeader() {
         setMenuOpen(false);
       }
     }
+    function onFocusIn(event: FocusEvent) {
+      if (event.target instanceof Node && !headerRef.current?.contains(event.target)) {
+        setMenuOpen(false);
+      }
+    }
     const desktop = window.matchMedia("(min-width: 981px)");
     function onViewportChange() {
       if (desktop.matches) setMenuOpen(false);
@@ -57,10 +137,12 @@ export function SiteHeader() {
 
     document.addEventListener("keydown", onKeyDown);
     document.addEventListener("pointerdown", onPointerDown);
+    document.addEventListener("focusin", onFocusIn);
     desktop.addEventListener("change", onViewportChange);
     return () => {
       document.removeEventListener("keydown", onKeyDown);
       document.removeEventListener("pointerdown", onPointerDown);
+      document.removeEventListener("focusin", onFocusIn);
       desktop.removeEventListener("change", onViewportChange);
     };
   }, [menuOpen]);
@@ -72,18 +154,9 @@ export function SiteHeader() {
         <div className="header-inner">
           <SiteBrand showIcon />
           <nav className="desktop-nav" aria-label="주 메뉴">
-            {navigation.map(item => item.external ? (
-              <a
-                href={item.href}
-                key={item.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`${item.label} · OSCODE (새 탭에서 열림)`}
-                title="OSCODE · 새 탭에서 열림"
-              >
-                {item.label}<ExternalLink size={13} aria-hidden="true" />
-              </a>
-            ) : <Link href={item.href} key={item.href}>{item.label}</Link>)}
+            {navigation.map(item => <Link href={item.href} key={item.href}>{item.label}</Link>)}
+            <DesktopAIServices />
+            <Link href="/community">커뮤니티</Link>
             <Link href={user ? "/account" : "/account/login"}>{user ? "내 활동" : "로그인"}</Link>
           </nav>
           <Link href="/consultation" className="header-cta">
@@ -102,23 +175,16 @@ export function SiteHeader() {
           </button>
         </div>
         <nav id={menuId} className="mobile-nav chrome-mobile-nav" aria-label="모바일 메뉴" hidden={!menuOpen}>
-          {navigation.map(item => item.external ? (
-            <a
-              href={item.href}
-              key={item.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`${item.label} · OSCODE (새 탭에서 열림)`}
-              title="OSCODE · 새 탭에서 열림"
-              onClick={() => setMenuOpen(false)}
-            >
-              {item.label}<ExternalLink size={18} aria-hidden="true" />
-            </a>
-          ) : (
+          {navigation.map(item => (
             <Link href={item.href} key={item.href} onClick={() => setMenuOpen(false)}>
               {item.label}<ArrowUpRight size={18} aria-hidden="true" />
             </Link>
           ))}
+          <div className="chrome-mobile-services" role="group" aria-labelledby={mobileServicesId}>
+            <p id={mobileServicesId}>AI 서비스</p>
+            <AIServiceLinks onSelect={() => setMenuOpen(false)} />
+          </div>
+          <Link href="/community" onClick={() => setMenuOpen(false)}>커뮤니티<ArrowUpRight size={18} aria-hidden="true" /></Link>
           <Link href={user ? "/account" : "/account/login"} onClick={() => setMenuOpen(false)}>{user ? "내 활동" : "로그인·회원가입"}<ArrowUpRight size={18} aria-hidden="true" /></Link>
           <Link className="chrome-mobile-consultation" href="/consultation" onClick={() => setMenuOpen(false)}>
             무료 상담 신청 <ArrowUpRight size={18} aria-hidden="true" />
