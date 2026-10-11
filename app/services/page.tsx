@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, ChevronRight, Check, GraduationCap, HeartPulse, Factory, Table2, ShoppingBag, Package, Store, BriefcaseBusiness, Workflow, MessageCircle, Plus } from "lucide-react";
 import { SERVICE_CATALOG } from "@/lib/service-catalog";
 import { siteMetadata } from "@/lib/seo";
 import { SiteHeader, SiteFooter } from "../components/SiteChrome";
@@ -11,37 +11,52 @@ export const metadata = siteMetadata({
   path: "/services",
 });
 
+const categoryIcons = [GraduationCap, HeartPulse, Factory, Table2, ShoppingBag, Package, Store, BriefcaseBusiness, Workflow];
+const categoryLabels = ["학원·교육", "병원·의원", "제조·생산", "엑셀·회계", "쇼핑몰", "물류·재고", "매장·외식", "사무·전문", "맞춤 자동화"];
+const cardHeadlines = ["원생 관리부터\n수납 확인까지.", "반복되는 운영 업무에\n여유를 더하세요.", "현장과 ERP를\n하나의 흐름으로.", "흩어진 엑셀을\n하나의 기준으로.", "여러 판매 채널을\n한눈에 정리하세요.", "입고부터 출고까지.\n자료가 이어지도록.", "매일의 마감이\n조금 더 가볍도록.", "자료 정리는 줄이고.\n중요한 일에 집중하고.", "어떤 일이든,\n함께 살펴볼까요?"];
+
 export default function ServicesPage() {
   return <>
     <SiteHeader />
     <main id="main" className="industry-page">
+      <div className="industry-announcement">첫 상담은 0원. 개발 비용은 상담 후 안내합니다.<Link href="/consultation">무료 상담 신청<ChevronRight size={14} aria-hidden="true" /></Link></div>
       <section className="section-wrap industry-intro">
-        <nav className="industry-breadcrumb" aria-label="현재 위치"><Link href="/">홈</Link><span aria-hidden="true">/</span><span aria-current="page">업종별 자동화</span></nav>
         <div className="industry-intro-grid">
-          <div><p className="industry-kicker">하는 일은 달라도, 반복 업무는 있으니까요.</p><h1>내 업무에 맞는<br /><span>자동화를 찾아보세요.</span></h1></div>
-          <div className="industry-intro-note"><p>학원, 병원, 제조부터 작은 매장과 사무 업무까지.<br className="industry-desktop-break" /> 지금 쓰는 도구와 일하는 방식에서 시작합니다.</p><div><span>첫 상담</span><strong>0<small>원</small></strong><p>자동화할 업무와 가능 범위를 함께 살펴봅니다.<br />개발 비용은 상담 후 별도로 안내합니다.</p></div></div>
+          <div><p className="industry-kicker">최진원의 업무 자동화</p><h1>업무 자동화.<br /><span>내 일에 꼭 맞게.</span></h1></div>
+          <div className="industry-intro-note"><p>지금 쓰는 도구는 익숙하게.<br />반복되는 일은 더 간결하게.</p><Link href="/consultation"><MessageCircle size={21} aria-hidden="true" /><span>어디서 시작할지 고민된다면<br /><strong>직접 상담하기<ChevronRight size={15} aria-hidden="true" /></strong></span></Link></div>
         </div>
+        <nav className="industry-categories" aria-label="업종 바로가기">
+          {SERVICE_CATALOG.map((offering,index) => { const Icon = categoryIcons[index]; return <a href={`#category-${offering.slug}`} key={offering.slug}><span><Icon size={37} strokeWidth={1.4} aria-hidden="true" /></span>{categoryLabels[index]}</a>; })}
+        </nav>
       </section>
 
       <section className="section-wrap industry-catalog" aria-labelledby="industry-list-title">
-        <div className="industry-section-top"><h2 id="industry-list-title">어떤 일을 하고 계신가요?</h2><span>업종을 선택해 적용 예시를 살펴보세요.</span></div>
+        <div className="industry-section-top"><h2 id="industry-list-title">업종별 자동화. <span>지금 하는 일에서 시작합니다.</span></h2></div>
         <div className="industry-card-grid">
-          {SERVICE_CATALOG.map((offering, index) => <article className="industry-card" key={offering.slug}>
+          {SERVICE_CATALOG.map((offering, index) => { const Icon = categoryIcons[index]; return <article className={`industry-card${index === 2 || index === 8 ? " industry-card-dark" : ""}`} key={offering.slug} id={`category-${offering.slug}`}>
             <Link className="industry-card-link" href={`/services/${offering.slug}`} aria-labelledby={`service-${offering.slug}`}>
-            <div className="industry-card-index"><span>{String(index + 1).padStart(2, "0")}</span><span>{offering.slug === "custom" ? "업무에 맞춰 함께" : "반복 업무부터 차근차근"}</span></div>
-            <h3 id={`service-${offering.slug}`}>{offering.title}<ArrowUpRight size={21} strokeWidth={1.5} aria-hidden="true" /></h3>
-            <p>{offering.description}</p>
-            <ul className="industry-input-tags" aria-label="연결할 수 있는 자료">{offering.inputs.map(input => <li key={input}>{input}</li>)}</ul>
-            <div className="industry-card-bottom"><span>첫 상담 <strong>0원</strong></span><span className="industry-card-action">자세히 보기<ArrowRight size={16} aria-hidden="true" /></span></div>
+              <p className="industry-card-label" id={`service-${offering.slug}`}>{offering.title}</p>
+              <h3>{cardHeadlines[index].split("\n").map((line,i) => <span key={line}>{i > 0 && <br />}{line}</span>)}</h3>
+              <div className="industry-card-visual" aria-hidden="true">
+                <div className="industry-object-back"><Icon size={58} strokeWidth={1.15} /></div>
+                <div className="industry-object-panel">
+                  <div className="industry-object-toolbar"><i /><i /><i /><span>업무 자료</span></div>
+                  <div className="industry-object-title"><Icon size={19} strokeWidth={1.6} />{categoryLabels[index]}</div>
+                  {offering.inputs.map(input => <div className="industry-object-row" key={input}><span>{input}</span><Check size={13} strokeWidth={2} /></div>)}
+                  <div className="industry-object-lines"><i /><i /><i /></div>
+                </div>
+              </div>
+              <p className="industry-card-description">{offering.description}</p>
+              <div className="industry-card-bottom"><span>첫 상담 <strong>0원</strong></span><span className="industry-card-action">자세히 보기<span><Plus size={20} aria-hidden="true" /></span></span></div>
             </Link>
-          </article>)}
+          </article>; })}
         </div>
-        <p className="industry-examples-note">소개된 업무는 적용 가능한 구성 예시입니다. 실제 구현 범위는 사용하는 도구와 자료를 확인한 뒤 정합니다.</p>
+        <p className="industry-examples-note">카드의 그래픽과 소개된 업무는 적용 가능한 구성 예시입니다. 실제 구현 범위와 개발 비용은 사용하는 도구와 자료를 확인한 뒤 정합니다.</p>
       </section>
 
       <section className="section-wrap industry-start">
-        <div><p className="industry-kicker">어디서 시작할지 고민된다면</p><h2>반복하는 업무 하나만<br />이야기해 주세요.</h2><p>정리된 요구사항이 없어도 괜찮습니다.<br />지금 불편한 점부터 함께 살펴보겠습니다.</p></div>
-        <Link className="button button-dark" href="/consultation">무료 상담 신청<ArrowUpRight size={18} aria-hidden="true" /></Link>
+        <div><p className="industry-kicker">당신의 업무를 듣는 것부터.</p><h2>작은 반복 하나가,<br />좋은 시작이 됩니다.</h2><p>정리된 요구사항이 없어도 괜찮습니다.<br />지금 불편한 점부터 함께 살펴보겠습니다.</p></div>
+        <div className="industry-start-action"><span>첫 상담 비용 <strong>0원</strong></span><Link className="button button-dark" href="/consultation">무료 상담 신청<ArrowUpRight size={18} aria-hidden="true" /></Link><p>개발 비용은 상담 후 별도 안내</p></div>
       </section>
     </main>
     <SiteFooter />

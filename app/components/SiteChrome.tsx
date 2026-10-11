@@ -57,8 +57,8 @@ export function SiteHeader() {
 
   return (
     <>
-      <a className="skip-link" href="#main">본문으로 바로가기</a>
-      <header className="site-header site-chrome-header" ref={headerRef}>
+      <a className="skip-link site-chrome-skip-link" href="#main">본문으로 바로가기</a>
+      <header className="site-header site-chrome-header" data-menu-open={menuOpen} ref={headerRef}>
         <div className="header-inner">
           <PersonalBrand />
           <nav className="desktop-nav" aria-label="주 메뉴">
@@ -76,7 +76,7 @@ export function SiteHeader() {
             aria-controls={menuId}
             onClick={() => setMenuOpen(open => !open)}
           >
-            {menuOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
+            {menuOpen ? <X strokeWidth={1.5} aria-hidden="true" /> : <Menu strokeWidth={1.5} aria-hidden="true" />}
           </button>
         </div>
         <nav id={menuId} className="mobile-nav chrome-mobile-nav" aria-label="모바일 메뉴" hidden={!menuOpen}>
