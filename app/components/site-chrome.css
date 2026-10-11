@@ -35,6 +35,18 @@
   flex-shrink: 0;
 }
 
+.site-chrome-header .brand {
+  min-height: 44px;
+  white-space: nowrap;
+}
+
+.site-chrome-header .brand-icon {
+  display: block;
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+}
+
 .site-chrome-header .personal-brand-name,
 .site-chrome-footer .personal-brand-name { font-size: 22px; font-weight: 600; }
 

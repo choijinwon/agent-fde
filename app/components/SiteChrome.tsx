@@ -12,9 +12,13 @@ const navigation = [
   { label: "진행 방식", href: "/#process" },
 ];
 
-function SiteBrand() {
+function SiteBrand({ showIcon = false }: { showIcon?: boolean }) {
   return (
     <a className="brand" href="/#home" aria-label={`${BRAND_NAME} 홈페이지 처음으로`}>
+      {showIcon && <svg className="brand-icon" width="32" height="32" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+        <rect width="64" height="64" rx="17" fill="#0071e3" />
+        <path d="m12 20 8 25 12-22 12 22 8-25" fill="none" stroke="#fff" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>}
       <span className="personal-brand-name">{BRAND_NAME}</span>
       <span className="personal-brand-role">{BRAND_ENGLISH_NAME}</span>
     </a>
@@ -61,7 +65,7 @@ export function SiteHeader() {
       <a className="skip-link site-chrome-skip-link" href="#main">본문으로 바로가기</a>
       <header className="site-header site-chrome-header" data-menu-open={menuOpen} ref={headerRef}>
         <div className="header-inner">
-          <SiteBrand />
+          <SiteBrand showIcon />
           <nav className="desktop-nav" aria-label="주 메뉴">
             {navigation.map(item => <a href={item.href} key={item.href}>{item.label}</a>)}
           </nav>
