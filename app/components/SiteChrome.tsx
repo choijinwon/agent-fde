@@ -19,6 +19,7 @@ const aiServices = [
   { label: "지식 검색", brand: "Orbit Knowledge", href: "https://wiki.workauto.co.kr/" },
   { label: "책 추천", brand: "에이전트북", href: "https://book.workauto.co.kr/" },
   { label: "의류 검색", brand: "FIND / WEAR", href: "https://shop.workauto.co.kr/" },
+  { label: "구매 기록", brand: "뭐샀지", href: "https://buy.workauto.co.kr/" },
   { label: "귀가 경로", brand: "집으로", href: "https://home.workauto.co.kr/" },
 ];
 
