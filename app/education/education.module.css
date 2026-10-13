@@ -1,0 +1,106 @@
+.page { padding-bottom: 80px; word-break: keep-all; overflow-wrap: break-word; }
+.kicker { color: #0066cc; font-size: 13px; font-weight: 600; letter-spacing: -.15px; margin-bottom: 20px; }
+.hero { display: grid; grid-template-columns: 1.15fr 1fr; align-items: center; gap: 64px; padding-top: 88px; padding-bottom: 100px; }
+.hero h1 { font-size: clamp(42px, 4.2vw, 60px); line-height: 1.2; letter-spacing: -2.6px; font-weight: 750; }
+.hero h1 span, .sectionTop h2 span { color: #0066cc; }
+.lead { color: #6e6e73; font-size: 18px; line-height: 1.8; margin-top: 28px; }
+.actions { display: flex; align-items: center; flex-wrap: wrap; gap: 16px 24px; margin-top: 32px; }
+.note { margin-top: 15px; font-size: 12px; color: #6e6e73; }
+.notebook { padding: 28px 32px; background: #fff; border: 1px solid #e4e7ed; border-radius: 24px; box-shadow: 0 12px 40px #24375808; }
+.notebookTop { display: flex; justify-content: space-between; gap: 14px; padding-bottom: 20px; border-bottom: 1px solid #ececef; color: #6e6e73; font-size: 11px; }
+.notebookTop span:first-child { color: #1d1d1f; font-weight: 600; }
+.promptBefore { margin: 28px 0 16px; color: #6e6e73; font-size: 19px; }
+.notebook > svg { color: #0071e3; }
+.promptAfter { margin-top: 18px; font-size: clamp(18px, 1.8vw, 23px); line-height: 1.85; letter-spacing: -.5px; }
+.promptAfter strong { color: #005dbd; font-weight: 600; background: #f0f6ff; }
+.promptTags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+.promptTags span { background: #f5f5f7; padding: 5px 10px; border-radius: 6px; color: #5a5a61; font-size: 11px; }
+.notebookFoot { margin-top: 24px; padding-top: 18px; border-top: 1px solid #ececef; color: #6e6e73; font-size: 12px; }
+.sectionTop > p:last-child { color: #6e6e73; font-size: 16px; line-height: 1.8; margin-top: 22px; }
+.sectionTop h2, .learning h2, .faq h2 { font-size: clamp(30px, 3.4vw, 44px); letter-spacing: -1.6px; }
+.audience { padding-top: 60px; padding-bottom: 76px; border-top: 1px solid #dcdce0; }
+.audienceGrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px; margin-top: 38px; }
+.audienceGrid > div > svg { color: #0066cc; margin-bottom: 12px; }
+.audienceGrid h3 { font-size: 17px; font-weight: 650; letter-spacing: -.4px; }
+.audienceGrid p { font-size: 14px; color: #6e6e73; margin-top: 10px; line-height: 1.7; }
+.curriculum { padding-top: 52px; padding-bottom: 88px; scroll-margin-top: 24px; }
+.lessonGrid { padding: 0; margin: 40px 0 0; list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+.lesson { display: flex; flex-direction: column; padding: 32px; background: #fff; border-radius: 22px; }
+.lessonTop { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 22px; }
+.lessonTop span:first-child { color: #0066cc; font-size: 30px; font-weight: 500; letter-spacing: -1px; }
+.lessonTop span:last-child { color: #6e6e73; font-size: 12px; }
+.lesson h3 { font-size: 23px; font-weight: 650; letter-spacing: -.65px; line-height: 1.4; }
+.lesson > p:not(.result) { color: #6e6e73; font-size: 15px; line-height: 1.8; margin-top: 14px; margin-bottom: 24px; }
+.practice { margin-top: auto; border-top: 1px solid #ececef; padding-top: 20px; }
+.practice > span { color: #6e6e73; font-size: 11px; }
+.practice p { margin-top: 6px; font-size: 14px; }
+.lesson .result { display: flex; align-items: center; gap: 8px; margin-top: 16px; color: #0066cc; font-size: 13px; }
+.learning { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 80px; padding-top: 66px; padding-bottom: 66px; border-top: 1px solid #dcdce0; border-bottom: 1px solid #dcdce0; }
+.learning > div > p:last-child { color: #6e6e73; font-size: 15px; line-height: 1.85; max-width: 480px; margin-top: 24px; }
+.learning ul { padding: 0; margin: 0; list-style: none; }
+.learning li { display: flex; align-items: center; gap: 14px; padding: 18px 0; font-size: 16px; border-bottom: 1px solid #e0e0e4; }
+.learning li:last-child { border-bottom: 0; }
+.learning li svg { color: #0066cc; }
+.faq { display: grid; grid-template-columns: 1fr 1.4fr; gap: 64px; padding-top: 88px; padding-bottom: 88px; }
+.faq details { border-bottom: 1px solid #dcdce0; }
+.faq details:first-child { border-top: 1px solid #dcdce0; }
+.faq summary { display: flex; align-items: center; justify-content: space-between; gap: 24px; list-style: none; cursor: pointer; min-height: 74px; padding: 20px 0; font-size: 16px; font-weight: 600; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary svg { color: #6e6e73; }
+.faq details[open] summary svg { transform: rotate(45deg); }
+.faq details > p { color: #6e6e73; font-size: 14px; line-height: 1.85; padding-bottom: 24px; }
+.enroll { display: flex; align-items: center; justify-content: space-between; gap: 36px; padding-top: 60px; padding-bottom: 60px; background: #eaf2ff; border-radius: 26px; max-width: 1232px; }
+.enroll h2 { font-size: clamp(26px, 3vw, 36px); letter-spacing: -1.2px; }
+.enroll > div > p:not(.kicker):not(.note) { color: #5a6473; font-size: 15px; margin-top: 20px; line-height: 1.85; }
+.enroll > div:last-child { flex-shrink: 0; }
+.enroll .note { text-align: center; }
+.home { padding-top: 76px; padding-bottom: 76px; }
+.homeInner { display: grid; grid-template-columns: 1.1fr 1fr; gap: 64px; align-items: center; padding: 48px; border-radius: 26px; background: #eaf2ff; }
+.home h2 { font-size: clamp(32px, 3.3vw, 44px); letter-spacing: -1.7px; }
+.homeDescription { margin: 22px 0 20px; color: #596577; font-size: 16px; line-height: 1.8; }
+.homeSteps { margin: 0; padding: 0; list-style: none; }
+.homeSteps li { display: flex; align-items: center; gap: 24px; padding: 20px 0; border-bottom: 1px solid #cdddf3; }
+.homeSteps li:last-child { border-bottom: 0; }
+.homeSteps span { font-size: 13px; color: #0066cc; }
+.homeSteps strong { display: block; font-size: 19px; font-weight: 600; letter-spacing: -.5px; }
+.homeSteps p { color: #596577; font-size: 13px; margin-top: 6px; }
+@media (max-width: 1100px) {
+  .hero { gap: 36px; }
+  .enroll { margin-left: 32px; margin-right: 32px; }
+  .notebook { padding: 24px; }
+}
+@media (max-width: 800px) {
+  .hero { grid-template-columns: 1fr; gap: 40px; padding-top: 54px; padding-bottom: 60px; }
+  .hero h1 { font-size: clamp(36px, 6.6vw, 52px); letter-spacing: -1.8px; }
+  .lead { font-size: 16px; }
+  .notebook { max-width: 520px; width: 100%; }
+  .promptAfter { font-size: 22px; }
+  .audienceGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 20px; }
+  .lesson { padding: 26px; }
+  .lesson h3 { font-size: 21px; }
+  .learning, .faq { grid-template-columns: 1fr; gap: 30px; }
+  .enroll { flex-direction: column; align-items: flex-start; }
+  .homeInner { grid-template-columns: 1fr; gap: 28px; padding: 32px; }
+}
+@media (max-width: 580px) {
+  .page > section { padding-left: 22px; padding-right: 22px; }
+  .page { padding-bottom: 48px; }
+  .kicker { font-size: 12px; }
+  .hero .actions { align-items: flex-start; gap: 12px 18px; }
+  .notebookTop { font-size: 10px; }
+  .notebook { padding: 24px 20px; }
+  .promptAfter { font-size: 19px; }
+  .audience { padding-top: 40px; padding-bottom: 42px; }
+  .audienceGrid h3 { font-size: 16px; }
+  .audienceGrid p { font-size: 13px; }
+  .curriculum { padding-top: 32px; padding-bottom: 52px; }
+  .lessonGrid { grid-template-columns: 1fr; gap: 16px; margin-top: 28px; }
+  .learning, .faq { padding-top: 48px; padding-bottom: 48px; }
+  .learning li { font-size: 15px; }
+  .enroll { margin-left: 16px; margin-right: 16px; padding-top: 36px; padding-bottom: 36px; border-radius: 20px; }
+  .enroll h2 { font-size: 29px; }
+  .home { padding-top: 48px; padding-bottom: 48px; }
+  .homeInner { padding: 28px 24px; }
+  .homeDescription { font-size: 15px; }
+  .homeSteps strong { font-size: 17px; }
+}

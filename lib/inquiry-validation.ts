@@ -1,7 +1,7 @@
 export const INQUIRY_SERVICES = [
   "학원 운영 자동화", "엑셀·회계 자동화", "제조 ERP 자동화", "병원 운영 자동화", "기타 맞춤 자동화",
   "쇼핑몰·유통 자동화", "물류·재고 자동화", "매장 운영 자동화", "일반 사무·전문서비스 자동화",
-  "AI 도입 진단", "맞춤형 AI PoC", "문서·지식 자동화", "서비스 구축·운영 개선", "아직 정하지 못했어요",
+  "AI 도입 진단", "맞춤형 AI PoC", "문서·지식 자동화", "서비스 구축·운영 개선", "AI 활용 교육", "아직 정하지 못했어요",
 ] as const;
 
 export const INQUIRY_BUDGETS = [
@@ -57,7 +57,7 @@ export function validateInquiry(value: unknown, now = Date.now()): InquiryInput 
   const email = getText(data.email, "이메일", 3, 254).toLowerCase();
   if (!/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(email)) throw new InquiryError("올바른 이메일 주소를 입력해 주세요.");
   const company = getText(data.company ?? "", "회사명", 0, 100);
-  const message = getText(data.message, "프로젝트 내용", 20, 5000);
+  const message = getText(data.message, "문의 내용", 20, 5000);
   if (typeof data.service !== "string" || !INQUIRY_SERVICES.includes(data.service as InquiryInput["service"])) {
     throw new InquiryError("관심 서비스를 선택해 주세요.");
   }

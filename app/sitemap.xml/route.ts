@@ -5,7 +5,7 @@ import { CASE_STUDIES } from "@/lib/case-studies";
 
 export const dynamic = "force-dynamic";
 export async function GET() {
-  const paths = ["/", "/services", "/diagnosis", "/calculator", "/cases", ...CASE_STUDIES.map(item => `/cases/${item.slug}`), "/community", "/community/guide", ...SERVICE_CATALOG.map(item => `/services/${item.slug}`)];
+  const paths = ["/", "/services", "/education", "/diagnosis", "/calculator", "/cases", ...CASE_STUDIES.map(item => `/cases/${item.slug}`), "/community", "/community/guide", ...SERVICE_CATALOG.map(item => `/services/${item.slug}`)];
   try {
     const posts = await listPublicPostSitemapEntries();
     const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${paths.map(path => `<url><loc>${SITE_URL}${path}</loc>${path.startsWith("/community") ? "" : `<lastmod>${CONTENT_UPDATED_AT}</lastmod>`}</url>`).join("")}${posts.map(post => `<url><loc>${SITE_URL}/community/${post.id}</loc><lastmod>${new Date(post.updatedAt).toISOString()}</lastmod></url>`).join("")}</urlset>`;

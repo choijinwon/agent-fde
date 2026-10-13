@@ -116,6 +116,7 @@ export type ServiceSlug = (typeof SERVICE_CATALOG)[number]["slug"];
 
 export const CONSULTATION_SERVICES = [
   ...SERVICE_CATALOG.map(({ service }) => service),
+  "AI 활용 교육",
   "아직 정하지 못했어요",
 ];
 

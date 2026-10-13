@@ -11,6 +11,7 @@ const contactEmail = "abyys1004@naver.com";
 const navigation = [
   { label: "무료 진단", href: "/diagnosis" },
   { label: "업종별 상담", href: "/services" },
+  { label: "AI 교육", href: "/education" },
   { label: "개발 사례", href: "/cases" },
 ];
 const aiServices = [
@@ -194,7 +195,7 @@ export function SiteHeader() {
           <Link className="chrome-mobile-consultation" href="/consultation" onClick={() => setMenuOpen(false)}>
             무료 상담 신청 <ArrowUpRight size={18} aria-hidden="true" />
           </Link>
-          <p className="chrome-mobile-note">첫 상담 0원 · 개발 비용은 상담 후 안내합니다.</p>
+          <p className="chrome-mobile-note">첫 상담 0원 · 개발·교육 비용은 상담 후 안내합니다.</p>
         </nav>
       </header>
     </>
@@ -212,6 +213,7 @@ export function SiteFooter() {
       <div className="footer-right">
           <div className="footer-links">
           <Link href="/calculator">절감 시간 계산</Link>
+          <Link href="/education">AI 교육·커리큘럼</Link>
           <Link href="/requests">내 의뢰 현황</Link>
           <Link href="/#about">소개·경력</Link>
           <Link href="/community/guide">커뮤니티 이용 안내</Link>

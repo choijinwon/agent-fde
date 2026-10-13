@@ -55,3 +55,15 @@ test("every selectable consultation service is accepted by the inquiry API valid
     assert.equal(validateInquiry({ ...valid(), service }, now).service, service);
   }
 });
+
+test("an individual can inquire about AI education without a company or development budget", () => {
+  const message = "AI는 처음 사용합니다. 1명이 문서 작성을 배우고 싶고 평일 저녁에 참여할 수 있습니다.";
+  const input = validateInquiry({ ...valid(), company: undefined, service: "AI 활용 교육", budget: "협의 후 결정", message }, now);
+  assert.ok(CONSULTATION_SERVICES.includes(input.service));
+  assert.equal(input.service, "AI 활용 교육");
+  assert.equal(input.company, "");
+  assert.equal(input.budget, "협의 후 결정");
+  assert.equal(input.message, message);
+  assert.throws(() => validateInquiry({ ...valid(), service: "AI 활용 교육", consent: false }, now), InquiryError);
+  assert.throws(() => validateInquiry({ ...valid(), service: "AI 활용 교육", message: "AI 배우기" }, now), /문의 내용/);
+});

@@ -33,6 +33,19 @@ test("Netlify payload preserves Korean and reserved characters and exactly match
   assert.match(skeleton, /data-netlify-honeypot="website"/);
 });
 
+test("AI education learning goals reach the existing Netlify form without extra fields", () => {
+  const message = "목표: 문서 작성 & 자료 정리\n현재 수준: 처음 사용\n참여 인원: 1명\n희망 일정: 평일 저녁";
+  const input = validateInquiry({ ...valid, company: "", service: "AI 활용 교육", message }, now);
+  const body = new URLSearchParams(encodeNetlifyConsultation(input, valid.startedAt));
+  const existing = new URLSearchParams(encodeNetlifyConsultation(validateInquiry(valid, now), valid.startedAt));
+  assert.equal(body.get("form-name"), NETLIFY_FORM_NAME);
+  assert.equal(body.get("service"), "AI 활용 교육");
+  assert.equal(body.get("budget"), "협의 후 결정");
+  assert.equal(body.get("company"), "");
+  assert.equal(body.get("message"), message);
+  assert.deepEqual([...body.keys()].sort(), [...existing.keys()].sort());
+});
+
 test("dashboard destinations remain on Netlify for malicious or malformed environment values", () => {
   assert.equal(getNetlifyFormsUrl("agent-fde"), "https://app.netlify.com/projects/agent-fde/forms");
   assert.equal(getNetlifyFormsUrl(undefined, "https://agent-fde.netlify.app/"), "https://app.netlify.com/projects/agent-fde/forms");
