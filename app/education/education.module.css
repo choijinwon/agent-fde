@@ -104,3 +104,5 @@
   .homeDescription { font-size: 15px; }
   .homeSteps strong { font-size: 17px; }
 }
+
+.reading { padding-top: 0; padding-bottom: 64px; }.reading h2 { font-size: clamp(26px, 3vw, 36px); letter-spacing: -1px; }.reading > p:not(.kicker) { max-width: 720px; color: #64646b; font-size: 16px; line-height: 1.85; margin: 20px 0; }

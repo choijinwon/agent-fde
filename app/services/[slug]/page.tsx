@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowDown, ArrowRight, ArrowUpRight, Check } from "lucide-react";
 import { SERVICE_CATALOG, findServiceBySlug } from "@/lib/service-catalog";
+import { GUIDES } from "@/lib/guides";
 import { CASE_STUDIES } from "@/lib/case-studies";
 import { SERVICE_GUIDES } from "@/lib/service-guides";
 import { siteMetadata, serviceJsonLd, safeJsonLd } from "@/lib/seo";
@@ -26,6 +27,7 @@ export default async function ServiceDetailPage({ params }: DetailPageProps) {
   if (!offering) notFound();
   const guide = SERVICE_GUIDES[offering.slug];
   const relatedServices = guide.relatedSlugs.map(slug => findServiceBySlug(slug)).filter(item => item !== undefined);
+  const relatedGuides = GUIDES.filter(item => item.relatedServiceSlugs.some(slug => slug === offering.slug));
   const relatedCases = CASE_STUDIES.filter(item => item.serviceSlug === offering.slug);
   const applicationHref = `/consultation?service=${offering.slug}`;
 
@@ -70,6 +72,11 @@ export default async function ServiceDetailPage({ params }: DetailPageProps) {
             <h2 id="service-faq-title">{offering.service} 자주 묻는 질문</h2>
             <div className="industry-faq-list">{guide.faqs.map(faq => <details key={faq.question}><summary>{faq.question}<span aria-hidden="true">+</span></summary><p>{faq.answer}</p></details>)}</div>
           </section>
+          {relatedGuides.length > 0 && <section className="industry-related" aria-labelledby="service-guides-title">
+            <h2 id="service-guides-title">견적 상담을 준비한다면</h2>
+            <p className="industry-experience-note">자동화할 범위와 확인할 조건을 먼저 정리해 보세요.</p>
+            <div className="industry-experience-list">{relatedGuides.map(item => <Link href={`/guides/${item.slug}`} key={item.slug}><h3>{item.title}<ArrowUpRight size={18} aria-hidden="true" /></h3><p>{item.description}</p></Link>)}</div>
+          </section>}
           {relatedCases.length > 0 && <section className="industry-related" aria-labelledby="related-experience-title">
             <h2 id="related-experience-title">관련 개발 경험</h2>
             <p className="industry-experience-note">운영자가 직접 구현한 기능과 개발 범위를 살펴보세요. 개인 개발 경력이며, 워크오토 고객 도입 실적과는 구분합니다.</p>

@@ -1,0 +1,18 @@
+.section { padding-top: 64px; padding-bottom: 64px; word-break: keep-all; overflow-wrap: break-word; }
+.heading { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; }
+.heading h2 { font-size: clamp(30px, 3.4vw, 44px); line-height: 1.25; letter-spacing: -1.5px; }
+.list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 48px; margin-top: 36px; }
+.list article { border-top: 1px solid #dcdce0; padding-top: 24px; }
+.category { color: #0066cc; font-size: 12px; font-weight: 600; margin-bottom: 14px; }
+.list h3 { font-size: 23px; line-height: 1.5; letter-spacing: -.7px; }
+.list h3 a { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+.list h3 svg { flex: none; margin-top: 7px; color: #0066cc; }
+.list h3 a:hover { color: #0066cc; }
+.list h3 a:focus-visible { outline: 3px solid #0071e3; outline-offset: 5px; border-radius: 4px; }
+.list article > p:last-child { margin-top: 16px; font-size: 15px; line-height: 1.8; color: #64646b; }
+@media (max-width: 720px) {
+  .section { padding-top: 44px; padding-bottom: 44px; }
+  .heading { flex-direction: column; align-items: flex-start; }
+  .list { grid-template-columns: 1fr; gap: 32px; margin-top: 28px; }
+  .list h3 { font-size: 21px; }
+}

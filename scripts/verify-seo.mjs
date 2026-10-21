@@ -7,7 +7,8 @@ const canonicalOrigin = "https://workauto.co.kr";
 const local = ["localhost", "127.0.0.1", "[::1]"].includes(base.hostname);
 const serviceSlugs = ["academy", "hospital", "manufacturing", "excel-accounting", "commerce", "logistics", "store", "office", "custom"];
 const caseSlugs = ["smart-factory", "design-learning", "ai-agent-data"];
-const landingPaths = ["/", "/services", "/education", "/diagnosis", "/calculator", "/cases", ...caseSlugs.map(slug => `/cases/${slug}`), "/community", "/community/guide", ...serviceSlugs.map(slug => `/services/${slug}`)];
+const guideSlugs = ["excel-automation-cost", "ai-beginner-practice"];
+const landingPaths = ["/", "/services", "/education", "/diagnosis", "/calculator", "/cases", ...caseSlugs.map(slug => `/cases/${slug}`), "/guides", ...guideSlugs.map(slug => `/guides/${slug}`), "/community", "/community/guide", ...serviceSlugs.map(slug => `/services/${slug}`)];
 const postPath = /^\/community\/[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const decode = value => value.replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#x27;|&#39;/g, "'");
 const attr = (tag, name) => decode(tag.match(new RegExp(`\\b${name}="([^"]*)"`, "i"))?.[1] || "");
@@ -52,7 +53,7 @@ for (const location of sitemapLocations) {
 }
 const sitemapXml = sitemapDocuments.join("\n");
 const locations = [...sitemapXml.matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => match[1]);
-assert.ok(locations.length >= landingPaths.length, "20 public landing pages plus published community posts in sitemap");
+assert.ok(locations.length >= landingPaths.length, "23 public landing pages plus published community posts in sitemap");
 assert.equal(new Set(locations).size, locations.length, "no duplicate sitemap URLs");
 for (const path of landingPaths) assert.ok(locations.includes(`${canonicalOrigin}${path}`), `${path} included in sitemap`);
 const publishedPostLocations = locations.filter(location => !landingPaths.includes(new URL(location).pathname));
@@ -75,6 +76,7 @@ const landingTitles = new Set();
 const landingDescriptions = new Set();
 let faqs = 0;
 let relatedLinks = 0;
+let guideFaqs = 0;
 for (const location of locations) {
   const url = new URL(location);
   assert.equal(url.origin, canonicalOrigin, "canonical sitemap origin");
@@ -119,16 +121,52 @@ for (const location of locations) {
     assert.ok(entities.some(entity => entity["@type"] === "Service"));
     assert.ok(entities.some(entity => entity["@type"] === "BreadcrumbList"));
   }
+  if (url.pathname === "/guides") {
+    assert.ok(entities.some(entity => entity["@type"] === "CollectionPage"), "guide collection entity");
+    const list = entities.find(entity => entity["@type"] === "ItemList");
+    assert.ok(list, "guide listing has a structured item list");
+    assert.equal(list.numberOfItems, guideSlugs.length, "guide list count");
+    assert.deepEqual(new Set(list.itemListElement.map(item => item.url)), new Set(guideSlugs.map(slug => `${canonicalOrigin}/guides/${slug}`)), "structured list links match published guides");
+    for (const slug of guideSlugs) assert.ok([...clean.matchAll(/<a\b[^>]*>/g)].some(match => attr(match[0], "href") === `/guides/${slug}`), "guide index links to each article without JavaScript");
+  }
+  if (url.pathname.startsWith("/guides/")) {
+    const main = clean.match(/<main\b[^>]*>([\s\S]*?)<\/main>/)?.[1] || "";
+    const details = [...main.matchAll(/<details\b[^>]*>([\s\S]*?)<\/details>/g)];
+    assert.equal(details.length, 2, `${url.pathname} two rendered FAQ answers`);
+    for (const detail of details) {
+      assert.match(detail[1], /<summary\b[^>]*>[\s\S]*?\S[\s\S]*?<\/summary>/, "FAQ question is rendered");
+      assert.ok(detail[1].replace(/<summary\b[^>]*>[\s\S]*?<\/summary>/, "").replace(/<[^>]*>/g, "").trim(), "FAQ answer is rendered");
+    }
+    guideFaqs += details.length;
+    const toc = [...main.matchAll(/<nav\b[^>]*>([\s\S]*?)<\/nav>/g)].map(match => match[1]).find(nav => /href="#/.test(nav)) || "";
+    const anchors = [...toc.matchAll(/<a\b[^>]*>/g)].map(match => attr(match[0], "href"));
+    assert.ok(anchors.length >= 2, `${url.pathname} has a linked table of contents`);
+    assert.equal(new Set(anchors).size, anchors.length, "table of contents does not repeat targets");
+    const ids = [...main.matchAll(/\bid="([^"]+)"/g)].map(match => decode(match[1]));
+    for (const href of anchors) {
+      assert.ok(href.startsWith("#") && href.length > 1, "table of contents uses local anchors");
+      assert.equal(ids.filter(id => id === href.slice(1)).length, 1, `${href} resolves to exactly one content section`);
+    }
+    const links = [...main.matchAll(/<a\b[^>]*>/g)].map(match => attr(match[0], "href"));
+    const educational = url.pathname.endsWith("/ai-beginner-practice");
+    assert.ok(links.includes(educational ? "/education" : "/services/excel-accounting"), "guide links to its relevant service or education page");
+    assert.ok(links.includes(`/consultation?service=${educational ? "ai-education" : "excel-accounting"}`), "guide consultation preserves the chosen service");
+    assert.ok(links.includes("/guides"), "guide links back to the listing");
+    const breadcrumb = entities.find(entity => entity["@type"] === "BreadcrumbList");
+    assert.ok(breadcrumb, "guide breadcrumb entity");
+    assert.deepEqual(breadcrumb.itemListElement.map(item => item.item), [`${canonicalOrigin}/`, `${canonicalOrigin}/guides`, location], "guide breadcrumb hierarchy");
+  }
 }
 assert.equal(faqs, serviceSlugs.length * 3, "all nine industry pages retain three rendered FAQ answers");
 assert.equal(relatedLinks, serviceSlugs.length * 2, "all nine industry pages retain two related links");
+assert.equal(guideFaqs, guideSlugs.length * 2, "both guides retain their visible questions and answers");
 for (const path of ["/consultation", "/consultation?service=academy", "/admin", "/account", "/account/login", "/account/login?mode=signup", "/community/new", "/community/manage", "/requests", "/requests/manage"]) {
   const { response, html } = await get(path);
   assert.equal(response.status, 200);
   assert.match(attr(meta(html, "robots"), "content"), /noindex/i, `${path} excluded from search`);
   assert.ok(!locations.some(location => new URL(location).pathname === new URL(path, base).pathname));
 }
-for (const path of ["/services/not-a-real-service", "/cases/not-a-real-case", "/community/not-a-real-post", "/not-a-real-page"]) {
+for (const path of ["/services/not-a-real-service", "/cases/not-a-real-case", "/guides/not-a-real-guide", "/community/not-a-real-post", "/not-a-real-page"]) {
   const { response } = await get(path);
   assert.equal(response.status, 404, `${path} real 404`);
 }
@@ -165,4 +203,4 @@ assert.deepEqual([...publicPostIds].sort(), publishedPostLocations.map(location 
 const font = await fetch(new URL("/fonts/pretendard-variable-1.3.9.woff2", base));
 assert.equal(font.status, 200, "self-hosted font served");
 assert.equal(Buffer.from(await font.arrayBuffer()).subarray(0, 4).toString(), "wOF2");
-console.log(JSON.stringify({ base: base.origin, landingPages: landingPaths.length, publishedPosts: publicPostIds.size, publicPages: locations.length, uniqueTitles: titles.size, uniqueDescriptions: descriptions.size, renderedFaqs: faqs, relatedLinks, sitemap: "pass", sitemapFiles: sitemapLocations.length, readOnly: true, robots: "pass", excludedPages: "pass", notFoundStatus: "pass", structuredData: "pass", anonymousCommunityAccess: "pass", anonymousRequestAccess: "pass", communityStorage: storageAvailable ? "connected" : "local unavailable", font: "pass" }, null, 2));
+console.log(JSON.stringify({ base: base.origin, landingPages: landingPaths.length, publishedPosts: publicPostIds.size, publicPages: locations.length, uniqueTitles: titles.size, uniqueDescriptions: descriptions.size, renderedFaqs: faqs, guidePages: guideSlugs.length, guideFaqs, relatedLinks, sitemap: "pass", sitemapFiles: sitemapLocations.length, readOnly: true, robots: "pass", excludedPages: "pass", notFoundStatus: "pass", structuredData: "pass", anonymousCommunityAccess: "pass", anonymousRequestAccess: "pass", communityStorage: storageAvailable ? "connected" : "local unavailable", font: "pass" }, null, 2));

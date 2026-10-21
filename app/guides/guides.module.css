@@ -1,0 +1,114 @@
+.page { padding-bottom: 80px; word-break: keep-all; overflow-wrap: break-word; }
+.kicker { color: #0066cc; font-size: 13px; font-weight: 600; letter-spacing: -.15px; }
+.indexHero { padding-top: 76px; padding-bottom: 64px; }
+.indexHero h1 { margin-top: 22px; font-size: clamp(38px, 4.2vw, 58px); line-height: 1.22; letter-spacing: -2.4px; font-weight: 750; }
+.indexHero h1 span { color: #6e6e73; }
+.indexLead { margin-top: 26px; color: #626269; font-size: 18px; line-height: 1.85; }
+.indexList { padding-bottom: 72px; }
+.listHeading { margin-bottom: 26px; font-size: 24px; letter-spacing: -.7px; }
+.cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+.card { display: flex; flex-direction: column; padding: 34px; border: 1px solid #e5e7eb; border-radius: 20px; background: #fff; }
+.card h3 { margin-top: 20px; font-size: 28px; line-height: 1.45; letter-spacing: -.9px; }
+.card h3 a:hover { color: #0066cc; }
+.cardDescription { margin-top: 20px; color: #626269; font-size: 15px; line-height: 1.85; }
+.cardBottom { margin-top: auto; padding-top: 34px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 14px; align-items: center; }
+.cardBottom time { color: #6e6e73; font-size: 12px; }
+.cardBottom a { display: inline-flex; align-items: center; gap: 7px; color: #0066cc; font-size: 14px; font-weight: 600; }
+.indexNext { display: flex; justify-content: space-between; gap: 36px; align-items: center; padding-top: 44px; border-top: 1px solid #dddfe4; }
+.indexNext h2 { font-size: 28px; letter-spacing: -.8px; }
+.indexNext p { margin-top: 15px; color: #626269; line-height: 1.85; }
+.nextLinks { display: flex; flex-direction: column; gap: 18px; }
+.nextLinks a { display: inline-flex; align-items: center; gap: 12px; color: #0066cc; font-weight: 600; }
+.article { width: 100%; max-width: 864px; margin: 0 auto; padding: 46px 48px 0; }
+.back { display: inline-flex; align-items: center; gap: 8px; color: #626269; font-size: 13px; }
+.back:hover { color: #0066cc; }
+.articleHeader > .kicker { margin-top: 42px; }
+.articleHeader h1 { margin-top: 18px; font-size: clamp(35px, 3.8vw, 48px); line-height: 1.32; letter-spacing: -1.8px; font-weight: 750; text-wrap: pretty; }
+.byline { display: flex; flex-wrap: wrap; gap: 7px 20px; margin-top: 25px; color: #6e6e73; font-size: 12px; }
+.introduction { margin-top: 34px; color: #4f5057; font-size: 19px; line-height: 1.95; letter-spacing: -.25px; }
+.contents { margin: 38px 0 12px; padding: 26px 30px; border: 1px solid #e0e5ed; border-radius: 14px; background: #fff; }
+.contents > p { margin-bottom: 14px; color: #1d1d1f; font-size: 14px; font-weight: 650; }
+.contents ol { margin: 0; padding-left: 21px; color: #6e6e73; }
+.contents li { padding: 5px 0 5px 3px; font-size: 14px; line-height: 1.65; }
+.contents a { color: #0066cc; }
+.contents a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.body { min-width: 0; }
+.articleSection { padding-top: 48px; scroll-margin-top: 92px; }
+.sectionNumber { margin-bottom: 12px; color: #0066cc; font-size: 14px; font-weight: 600; }
+.articleSection h2 { font-size: clamp(25px, 2.7vw, 31px); line-height: 1.4; letter-spacing: -.85px; }
+.articleSection > p:not(.sectionNumber) { margin-top: 22px; color: #4f5057; font-size: 16px; line-height: 1.95; }
+.checklist { margin: 24px 0 0; padding: 0; list-style: none; border-top: 1px solid #dddfe4; }
+.checklist li { display: grid; grid-template-columns: 58px minmax(0, 1fr); gap: 20px; padding: 18px 0; border-bottom: 1px solid #dddfe4; line-height: 1.8; }
+.checklist strong { color: #0066cc; font-size: 15px; font-weight: 650; }
+.checklist span { color: #4f5057; font-size: 15px; }
+.tableWrap { max-width: 100%; margin-top: 25px; }
+.comparison { width: 100%; table-layout: fixed; border-collapse: collapse; background: #fff; font-size: 14px; line-height: 1.8; }
+.comparison caption { padding-bottom: 14px; color: #6e6e73; text-align: left; font-size: 12px; }
+.comparison th, .comparison td { padding: 16px; text-align: left; vertical-align: top; border-bottom: 1px solid #e0e3e8; overflow-wrap: anywhere; }
+.comparison thead th { background: #edf3fb; color: #364d6b; font-weight: 600; }
+.comparison th:first-child { width: 24%; }
+.comparison tbody th { color: #41444b; font-weight: 600; }
+.comparison td { color: #555861; }
+.example { margin-top: 24px; padding: 25px 28px; border-left: 3px solid #0071e3; background: #edf3fb; border-radius: 0 12px 12px 0; }
+.example > p { margin-bottom: 14px; color: #526985; font-size: 12px; font-weight: 600; }
+.example blockquote { margin: 0; color: #243c59; font-size: 16px; line-height: 1.95; user-select: text; }
+.faq { margin-top: 12px; }
+.faq h2 { margin-bottom: 20px; }
+.faq details { border-bottom: 1px solid #dddfe4; }
+.faq summary { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 22px 0; list-style: none; cursor: pointer; font-size: 16px; line-height: 1.7; font-weight: 600; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary svg { flex-shrink: 0; color: #6e6e73; }
+.faq details[open] summary svg { transform: rotate(45deg); }
+.faq details > p { padding-bottom: 22px; color: #4f5057; font-size: 15px; line-height: 1.95; }
+.relatedLinks { display: flex; flex-direction: column; gap: 14px; margin-top: 24px; }
+.relatedLinks a { display: inline-flex; align-items: center; gap: 12px; width: fit-content; color: #0066cc; font-size: 15px; }
+.consultation { margin-top: 32px; padding: 32px; border-radius: 18px; background: #fff; border: 1px solid #e0e5ed; }
+.consultation h3 { font-size: 23px; line-height: 1.4; letter-spacing: -.6px; }
+.consultation > p { margin-top: 15px; color: #626269; font-size: 15px; line-height: 1.8; }
+.consultation > a { margin-top: 24px; }
+.consultation small { display: block; margin-top: 15px; color: #6e6e73; font-size: 12px; line-height: 1.7; }
+.articleFooter { margin-top: 52px; padding-top: 30px; border-top: 1px solid #dddfe4; }
+.articleFooter > p { color: #6e6e73; font-size: 12px; }
+.articleFooter > a:not(.back) { display: flex; align-items: center; gap: 20px; justify-content: space-between; padding: 17px 0; color: #0066cc; font-size: 18px; line-height: 1.6; font-weight: 600; }
+.articleFooter svg { flex-shrink: 0; }
+.articleFooter > .back { margin-top: 25px; }
+.page a:focus-visible, .page summary:focus-visible { outline: 2px solid #0071e3; outline-offset: 5px; border-radius: 3px; }
+@media (max-width: 800px) {
+  .indexHero { padding-top: 54px; padding-bottom: 45px; }
+  .cards { grid-template-columns: 1fr; gap: 20px; }
+  .card { padding: 30px; }
+  .indexNext { align-items: flex-start; flex-direction: column; gap: 26px; }
+  .article { padding-left: 32px; padding-right: 32px; }
+}
+@media (max-width: 580px) {
+  .page { padding-bottom: 50px; }
+  .indexHero h1 { font-size: 36px; letter-spacing: -1.7px; }
+  .indexLead { font-size: 16px; }
+  .listHeading { font-size: 21px; }
+  .indexList { padding-bottom: 42px; }
+  .card { padding: 26px 23px; }
+  .card h3 { font-size: 25px; }
+  .article { padding: 28px 22px 0; }
+  .articleHeader > .kicker { margin-top: 32px; }
+  .articleHeader h1 { font-size: 33px; letter-spacing: -1.3px; }
+  .byline { margin-top: 20px; font-size: 11px; }
+  .introduction { margin-top: 28px; font-size: 17px; line-height: 1.9; }
+  .contents { padding: 22px 20px; margin-top: 28px; }
+  .contents li { font-size: 13px; }
+  .articleSection { padding-top: 38px; }
+  .articleSection h2 { font-size: 25px; letter-spacing: -.7px; }
+  .articleSection > p:not(.sectionNumber) { font-size: 15px; }
+  .checklist li { gap: 12px; grid-template-columns: 42px minmax(0, 1fr); padding: 16px 0; }
+  .checklist span { font-size: 14px; }
+  .comparison { font-size: 13px; }
+  .comparison th, .comparison td { padding: 12px 9px; }
+  .comparison th:first-child { width: 23%; }
+  .example { padding: 22px 20px; }
+  .example blockquote { font-size: 15px; }
+  .faq summary { font-size: 15px; gap: 15px; }
+  .consultation { padding: 26px 22px; }
+  .consultation h3 { font-size: 22px; }
+  .consultation > a { max-width: 100%; gap: 9px; font-size: 13px; }
+  .consultation > a svg { flex-shrink: 0; }
+  .articleFooter > a:not(.back) { font-size: 17px; }
+}

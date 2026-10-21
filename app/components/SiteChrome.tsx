@@ -214,6 +214,7 @@ export function SiteFooter() {
           <div className="footer-links">
           <Link href="/calculator">절감 시간 계산</Link>
           <Link href="/education">AI 교육·커리큘럼</Link>
+          <Link href="/guides">활용 가이드</Link>
           <Link href="/requests">내 의뢰 현황</Link>
           <Link href="/#about">소개·경력</Link>
           <Link href="/community/guide">커뮤니티 이용 안내</Link>

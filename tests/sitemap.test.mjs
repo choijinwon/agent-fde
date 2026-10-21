@@ -34,7 +34,7 @@ function harness(readPosts = async () => []) {
 
 const locations = xml => [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map(match => match[1]);
 
-test("sitemap index and 19 independent public pages remain available without importing community storage", async () => {
+test("sitemap index and 22 independent public pages remain available without importing community storage", async () => {
   const app = harness(async () => { throw new Error("Store offline"); });
   const index = app.load("app/sitemap.xml/route.ts");
   const pages = app.load("app/sitemap-pages.xml/route.ts");
@@ -49,9 +49,9 @@ test("sitemap index and 19 independent public pages remain available without imp
   assert.match(response.headers.get("cache-control"), /public/);
   const xml = await response.text();
   const urls = locations(xml);
-  assert.equal(urls.length, 19);
+  assert.equal(urls.length, 22);
   assert.equal(new Set(urls).size, urls.length);
-  for (const path of ["/", "/education", "/services", "/services/academy", "/services/manufacturing", "/services/excel-accounting", "/cases", "/community/guide"]) assert.ok(urls.includes(`https://workauto.co.kr${path}`), `${path} discoverable`);
+  for (const path of ["/", "/education", "/services", "/services/academy", "/services/manufacturing", "/services/excel-accounting", "/cases", "/guides", "/guides/excel-automation-cost", "/guides/ai-beginner-practice", "/community/guide"]) assert.ok(urls.includes(`https://workauto.co.kr${path}`), `${path} discoverable`);
   assert.ok(!urls.includes("https://workauto.co.kr/community"), "community listing is included only in the community sitemap");
   assert.ok(urls.every(url => !/\/(account|requests|admin|consultation)(\/|$)/.test(new URL(url).pathname)));
   assert.equal(app.storeImports(), 0, "search discovery for service pages must not depend on community storage");

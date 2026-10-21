@@ -74,6 +74,13 @@ export default function EducationPage() {
         <div>{questions.map(item => <details key={item.q}><summary>{item.q}<Plus size={18} aria-hidden="true" /></summary><p>{item.a}</p></details>)}</div>
       </section>
 
+      <section className={`section-wrap ${styles.reading}`} aria-labelledby="education-reading-title">
+        <p className={styles.kicker}>수업 전에 직접 해보고 싶다면</p>
+        <h2 id="education-reading-title">질문 하나로 시작하는 AI 연습.</h2>
+        <p>가상의 모임 안내문을 만들며 질문에 조건을 더하고, 답변을 원자료와 비교해 보세요. 처음 배우는 분을 위한 연습 순서를 준비했습니다.</p>
+        <Link className="text-link" href="/guides/ai-beginner-practice">AI 초보자 실습 가이드 읽기<ArrowUpRight size={17} aria-hidden="true" /></Link>
+      </section>
+
       <section className={`section-wrap ${styles.enroll}`}>
         <div><p className={styles.kicker}>첫걸음은 대화부터</p><h2>AI로 해보고 싶은 일이 있나요?</h2><p>지금의 경험 수준과 배우고 싶은 내용을 알려주세요.<br />나에게 맞는 시작점을 함께 찾겠습니다.</p></div>
         <div><Link className="button button-dark" href={inquiryHref}>AI 교육 상담 신청<ArrowUpRight size={18} aria-hidden="true" /></Link><p className={styles.note}>첫 상담 무료 · 교육비 별도 안내</p></div>

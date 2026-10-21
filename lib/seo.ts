@@ -8,6 +8,10 @@ const CONTENT_UPDATED_AT = "2026-10-13";
 const PAGE_UPDATES: Record<string, string> = {
   "/": "2026-10-21",
   "/education": "2026-10-21",
+  "/guides": "2026-10-21",
+  "/guides/excel-automation-cost": "2026-10-21",
+  "/guides/ai-beginner-practice": "2026-10-21",
+  "/services/excel-accounting": "2026-10-21",
   "/services/academy": "2026-10-21",
   "/services/manufacturing": "2026-10-21",
   "/services/custom": "2026-10-21",
