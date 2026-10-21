@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowDown, ArrowRight, ArrowUpRight, Check } from "lucide-react";
 import { SERVICE_CATALOG, findServiceBySlug } from "@/lib/service-catalog";
+import { CASE_STUDIES } from "@/lib/case-studies";
 import { SERVICE_GUIDES } from "@/lib/service-guides";
 import { siteMetadata, serviceJsonLd, safeJsonLd } from "@/lib/seo";
 import { SiteHeader, SiteFooter } from "../../components/SiteChrome";
@@ -25,6 +26,7 @@ export default async function ServiceDetailPage({ params }: DetailPageProps) {
   if (!offering) notFound();
   const guide = SERVICE_GUIDES[offering.slug];
   const relatedServices = guide.relatedSlugs.map(slug => findServiceBySlug(slug)).filter(item => item !== undefined);
+  const relatedCases = CASE_STUDIES.filter(item => item.serviceSlug === offering.slug);
   const applicationHref = `/consultation?service=${offering.slug}`;
 
   return <>
@@ -68,6 +70,11 @@ export default async function ServiceDetailPage({ params }: DetailPageProps) {
             <h2 id="service-faq-title">{offering.service} 자주 묻는 질문</h2>
             <div className="industry-faq-list">{guide.faqs.map(faq => <details key={faq.question}><summary>{faq.question}<span aria-hidden="true">+</span></summary><p>{faq.answer}</p></details>)}</div>
           </section>
+          {relatedCases.length > 0 && <section className="industry-related" aria-labelledby="related-experience-title">
+            <h2 id="related-experience-title">관련 개발 경험</h2>
+            <p className="industry-experience-note">운영자가 직접 구현한 기능과 개발 범위를 살펴보세요. 개인 개발 경력이며, 워크오토 고객 도입 실적과는 구분합니다.</p>
+            <div className="industry-experience-list">{relatedCases.map(item => <Link key={item.slug} href={`/cases/${item.slug}`}><h3>{item.title}<ArrowUpRight size={18} aria-hidden="true" /></h3><p>{item.description}</p></Link>)}</div>
+          </section>}
           <section className="industry-related" aria-labelledby="related-services-title">
             <h2 id="related-services-title">함께 살펴볼 자동화</h2>
             <div className="industry-related-grid">{relatedServices.map(item => <Link key={item.slug} href={`/services/${item.slug}`}><h3>{item.service}<ArrowUpRight size={18} aria-hidden="true" /></h3><p>{item.description}</p></Link>)}</div>

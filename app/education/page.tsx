@@ -4,8 +4,9 @@ import { SiteHeader, SiteFooter } from "@/app/components/SiteChrome";
 import { siteMetadata, safeJsonLd, webPageJsonLd } from "@/lib/seo";
 import styles from "./education.module.css";
 
+const title = "AI 기초·활용 교육 · 초보자를 위한 실습 커리큘럼";
 const description = "AI를 배우고 싶은 누구나. 코딩 경험 없이 시작하는 AI 기초 교육부터 질문법, 글쓰기·자료 정리, 콘텐츠 제작, 생활·업무 활용까지 6단계 실습 커리큘럼을 만나보세요. 첫 상담은 무료이며 교육 일정과 비용은 별도 안내합니다.";
-export const metadata = siteMetadata({ title: "AI 교육 · 입문부터 생활·업무 활용까지", description, path: "/education" });
+export const metadata = siteMetadata({ title, description, path: "/education" });
 const inquiryHref = "/consultation?service=ai-education";
 
 const curriculum = [
@@ -25,14 +26,14 @@ const questions = [
 
 export default function EducationPage() {
   return <>
-    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(webPageJsonLd({ title: "AI 교육 · 입문부터 생활·업무 활용까지", description, path: "/education" })) }} />
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safeJsonLd(webPageJsonLd({ title, description, path: "/education" })) }} />
     <SiteHeader />
     <main id="main" className={styles.page}>
       <section className={`section-wrap ${styles.hero}`}>
         <div>
           <p className={styles.kicker}>워크오토 AI 교육 · 배우고 싶은 누구나</p>
-          <h1>AI, 궁금했다면.<br /><span>이제 직접 써보세요.</span></h1>
-          <p className={styles.lead}>처음 질문하는 순간부터 내 일에 활용하기까지.<br />어려운 용어보다 직접 해보는 경험으로,<br />나에게 필요한 AI 사용법을 배웁니다.</p>
+          <h1>AI 기초부터,<br /><span>생활·업무 활용까지.</span></h1>
+          <p className={styles.lead}>코딩 경험 없이 시작하는 AI 기초 교육입니다.<br />질문법부터 글쓰기, 자료 정리와 콘텐츠 제작까지<br />직접 실습하며 배웁니다.</p>
           <div className={styles.actions}><Link className="button button-dark" href={inquiryHref}>AI 교육 상담 신청<ArrowUpRight size={18} aria-hidden="true" /></Link><a className="text-link" href="#curriculum">커리큘럼 보기<ArrowDown size={16} aria-hidden="true" /></a></div>
           <p className={styles.note}>첫 상담 무료 · 교육 일정과 비용은 상담 후 안내</p>
         </div>
@@ -54,7 +55,7 @@ export default function EducationPage() {
       </section>
 
       <section className={`section-wrap ${styles.curriculum}`} id="curriculum" aria-labelledby="curriculum-title">
-        <div className={styles.sectionTop}><p className={styles.kicker}>AI, 처음부터 내 일에 쓰기</p><h2 id="curriculum-title">기초부터 나만의 실습까지.<br /><span>6단계로 차근차근.</span></h2><p>설명을 듣고, 직접 해보고, 결과를 확인합니다.<br />아래는 기본 커리큘럼이며 경험과 목표에 따라 범위와 진도를 조정합니다.</p></div>
+        <div className={styles.sectionTop}><p className={styles.kicker}>AI, 처음부터 내 일에 쓰기</p><h2 id="curriculum-title">AI 활용 교육 커리큘럼.<br /><span>6단계로 차근차근.</span></h2><p>설명을 듣고, 직접 해보고, 결과를 확인합니다.<br />아래는 기본 커리큘럼이며 경험과 목표에 따라 범위와 진도를 조정합니다.</p></div>
         <ol className={styles.lessonGrid}>{curriculum.map((lesson, index) => <li key={lesson.title} className={styles.lesson}>
           <div className={styles.lessonTop}><span>{String(index + 1).padStart(2, "0")}</span><span>{lesson.topic}</span></div>
           <h3>{lesson.title}</h3><p>{lesson.description}</p>

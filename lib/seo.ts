@@ -3,8 +3,18 @@ import { BRAND_NAME, BRAND_ENGLISH_NAME, BRAND_TAGLINE } from "./brand";
 
 // Keep canonical URLs stable across local, preview, and production builds.
 export const SITE_URL = "https://workauto.co.kr";
-// Editorial revision date, not a build timestamp. Update only when public content changes.
-export const CONTENT_UPDATED_AT = "2026-10-13";
+// Editorial revision dates, never generated from build or request timestamps.
+const CONTENT_UPDATED_AT = "2026-10-13";
+const PAGE_UPDATES: Record<string, string> = {
+  "/": "2026-10-21",
+  "/education": "2026-10-21",
+  "/services/academy": "2026-10-21",
+  "/services/manufacturing": "2026-10-21",
+  "/services/custom": "2026-10-21",
+};
+export function pageUpdatedAt(path: string) {
+  return PAGE_UPDATES[path] ?? CONTENT_UPDATED_AT;
+}
 
 export function siteMetadata({ title, description, path }: { title: string; description: string; path: string }): Metadata {
   const fullTitle = title.includes(BRAND_NAME) ? title : `${title} | ${BRAND_NAME}`;
@@ -32,7 +42,7 @@ export function webPageJsonLd({ title, description, path }: { title: string; des
     url, name: title, description, inLanguage: "ko-KR",
     isPartOf: { "@id": `${SITE_URL}/#website` },
     about: { "@id": `${SITE_URL}/#brand` },
-    dateModified: CONTENT_UPDATED_AT,
+    dateModified: pageUpdatedAt(path),
   };
 }
 
