@@ -1,5 +1,6 @@
-export function safeAccountDestination(value: string | null | undefined): string {
-  if (!value || /[\\\u0000-\u0020]/.test(value) || value.startsWith("//")) return "/account";
+export function safeAccountDestination(value: string | string[] | null | undefined): string {
+  if (typeof value !== "string" || !value || /[\\\u0000-\u0020]/.test(value) || value.startsWith("//")) return "/account";
+  if (value === "/requests" || value === "/requests/manage") return value;
   return /^\/(community|account)(?:\/|\?|$)/.test(value) ? value : "/account";
 }
 
